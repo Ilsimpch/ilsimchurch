@@ -815,7 +815,7 @@ textarea.input { min-height: 90px; resize: vertical; }
   <sc-if value="{{ isDepts }}" hint-placeholder-val="{{ false }}">
     <section class="pg-head" data-screen-label="부서소개" style="padding: 84px 0 56px;">
       <h1 class="m-wrap" style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; white-space: nowrap;">다음 세대와 함께 자라는 교회</h1>
-      <p style="font-size: 17px; margin: 28px 0 0;">유치아동부부터 청년부까지, 각 부서가 세대에 맞는 예배와 교육으로 믿음을 이어갑니다.</p>
+      <p style="font-size: 17px; margin: 28px 0 0;">유치·아동부부터 청년부까지, 각 부서가 세대에 맞는 예배와 교육으로 믿음을 이어갑니다.</p>
       <div class="dept-tabs" style="display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 42px; padding: 14px 0; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
         <sc-for list="{{ deptTabs }}" as="t" hint-placeholder-count="3">
           <a href="{{ t.href }}" onClick="{{ t.go }}" aria-current="{{ t.current }}" style="font-size: 17px; line-height: 28px; font-family: var(--font-heading); font-weight: 600; color: {{ t.color }}; border-bottom: 2px solid {{ t.underline }}; padding-bottom: 2px;" style-hover="color: var(--color-accent-700);">{{ t.label }}</a>
@@ -1185,11 +1185,11 @@ class Component extends DCLogic {
         { name: '금요 심야기도회', time: '금요일 오후 8시', place: '본당', note: '' },
       ],
       schoolRows: [
-        { name: '유치아동부', time: '주일 오전 11시', place: '3층 유치부실 · 아동부실' },
+        { name: '유치·아동부', time: '주일 오전 11시', place: '3층 유치부실 · 아동부실' },
         { name: '중고등부', time: '주일 오전 11시 30분', place: '4층 중고등부실' },
         { name: '청년부', time: '주일 오후 1시 30분', place: '본당' },
       ],
-      deptTabs: ['유치아동부', '중고등부', '청년부'].map((label, i) => ({
+      deptTabs: ['유치·아동부', '중고등부', '청년부'].map((label, i) => ({
         label, href: '#depts', go: this.pickDept(i),
         current: i === this.state.dept ? 'true' : undefined,
         color: i === this.state.dept ? 'var(--color-accent-700)' : 'var(--color-text)',
@@ -1199,11 +1199,11 @@ class Component extends DCLogic {
       deptPrev: () => this.setState(s => ({ dept: (s.dept + 2) % 3 })),
       deptNext: () => this.setState(s => ({ dept: (s.dept + 1) % 3 })),
       depts: [
-        { id: 'dept-kinder-elem', group: '교회학교', name: '유치아동부', photos: [1,2,3,4].map(n => ({ id: 'kinderelem-' + n, file: '부서소개_유치아동부_' + n + '.jpg', src: pic('부서소개_유치아동부_' + n) })),
-          meta: '연령 : 만 3세 – 초등학교 6학년 | 예배 : 주일 오전 11시, 3층 유치부실 · 아동부실 | 담당교역자 : 김종환 부목사 · 염스람 교육전도사',
+        { id: 'dept-kinder-elem', group: '교회학교', name: '유치·아동부', photos: [1,2,3,4].map(n => ({ id: 'kinderelem-' + n, file: '부서소개_유치아동부_' + n + '.jpg', src: pic('부서소개_유치아동부_' + n) })),
+          meta: '연령 : 만 3세 – 초등학교 6학년 | 예배 : 주일 오전 11시, 3층 유치부실 · 아동부실 | 담당교역자 : 박완수 부목사 · 염스람 교육전도사',
           lines: ['하나, 찬양과 말씀, 놀이와 분반 공부로 하나님을 만나고 신앙의 기초를 세웁니다.', '하나, 함께 예배하고 함께 놀며 믿음의 우정을 쌓습니다.', '하나, 부모님과 소통하며 하나님의 자녀로 양육합니다.'] },
         { id: 'dept-middle', group: '교회학교', name: '중고등부', photos: [1,2,3,4].map(n => ({ id: 'middle-' + n, file: '부서소개_중고등부_' + n + '.jpg', src: pic('부서소개_중고등부_' + n) })),
-          meta: '연령 : 중학교 1학년 – 고등학교 3학년 | 예배 : 주일 오전 11시 30분, 4층 중고등부실 | 담당교역자 : 김종환 부목사',
+          meta: '연령 : 중학교 1학년 – 고등학교 3학년 | 예배 : 주일 오전 11시 30분, 4층 중고등부실 | 담당교역자 : 박완수 부목사',
           lines: ['하나, 예배자로서 성경적 신앙고백과 가치관을 세우고 제자의 삶을 훈련합니다.', '하나, 소그룹에서 말씀과 삶을 나누며 진로와 신앙을 함께 고민합니다.', '하나, 부모님과 소통하며 다음 세대를 믿음 안에서 세워갑니다.'] },
         { id: 'dept-youth', group: '청년부', name: '청년부', photos: [1,2,3,4].map(n => ({ id: 'youth-' + n, file: '부서소개_청년부_' + n + '.jpg', src: pic('부서소개_청년부_' + n) })),
           meta: '대상 : 대학생 · 직장 청년 | 예배 : 주일 오후 1시 30분, 본당 (주일 3부 예배 주관) | 담당교역자 : 이수철 부목사',
@@ -1254,9 +1254,9 @@ class Component extends DCLogic {
       albumHome: album.slice(0, 4),
       staffGroups: [
         { title: '부교역자', members: [
-          { id: 'staff-kim-jonghwan', file: '교회소개_부목사_김종환.jpg', src: pic('교회소개_부목사_김종환'), name: '김종환', role: '부목사', email: 'lyduce_kim@naver.com', duties: ['유치아동부, 중고등부 담당', '교육위원회 · 봉사위원회 · 관리위원회 담당', '1~7구역 담당'] },
+          { id: 'staff-park-wansu', file: '교회소개_부목사_박완수.jpg', src: pic('교회소개_부목사_박완수'), name: '박완수', role: '부목사', email: '', duties: ['유치·아동부, 중고등부 담당', '교육위원회 · 봉사위원회 · 관리위원회 담당', '1~7구역 담당'] },
           { id: 'staff-lee-sucheol', file: '교회소개_부목사_이수철.jpg', src: pic('교회소개_부목사_이수철'), name: '이수철', role: '부목사', email: '', duties: ['청년부 담당', '예배위원회 · 선교위원회 담당', '8~11구역 담당'] },
-          { id: 'staff-yeom-seuram', file: '교회소개_교육전도사_염스람.jpg', src: pic('교회소개_교육전도사_염스람'), name: '염스람', role: '교육전도사', email: '', duties: ['유치아동부 담당'] },
+          { id: 'staff-yeom-seuram', file: '교회소개_교육전도사_염스람.jpg', src: pic('교회소개_교육전도사_염스람'), name: '염스람', role: '교육전도사', email: '', duties: ['유치·아동부 담당'] },
         ]},
         { title: '직원', members: [
           { id: 'staff-shin-hyewon', file: '교회소개_사무간사_신혜원.jpg', src: pic('교회소개_사무간사_신혜원'), name: '신혜원', role: '사무간사', email: '', duties: [] },
