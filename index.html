@@ -6,6 +6,7 @@
 <title>일심교회</title>
 <meta name="description" content="대한예수교장로회 일심교회 — 서울 강남구 대치동. 예배 안내, 예배 영상, 교회 소식.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script>window.ILSIM_ASSETS = ["hero-art.webp", "pastor.webp", "poster-dawn.webp", "poster-fri.webp", "poster-sunday.webp", "poster-wed.webp"];</script>
 <script src="assets/react.production.min.js"></script>
 <script src="assets/react-dom.production.min.js"></script>
 <script src="./support.js"></script>
@@ -1124,7 +1125,10 @@ class Component extends DCLogic {
       || (open ? `${ymd(open).mo}월 ${ymd(open).dd}일 열린예배` : '열린예배');
     const openMeta = this.props.openMeta
       || (open ? `${ymd(open).y}년 ${ymd(open).mo}월 ${ymd(open).dd}일 오후 1시 30분 · 청년부` : '주일 오후 1시 30분 · 청년부');
-    const pic = (name) => 'assets/' + name + '.jpg';
+    // On the published site the build lists the files it ships (window.ILSIM_ASSETS): a photo that
+    // isn't there yet gets no src, so the slot shows its empty state without asking the server for it.
+    const shipped = typeof window !== 'undefined' && window.ILSIM_ASSETS;
+    const pic = (name) => (shipped && !shipped.includes(name + '.jpg')) ? '' : 'assets/' + name + '.jpg';
     const albumTitles = [
       ['2026 청소년·청년부 연합 하계선교', '2026. 8'], ['2026 하계선교 준비 일일찻집', '2026. 7'], ['2026 아동부 여름성경학교', '2026. 7'], ['2026 맥추감사주일 기념 전교인 행사', '2026. 7'],
       ['2026 장로·안수집사·권사 피택', '2026. 6'], ['2026 가정과 나라를 위한 철야기도회', '2026. 6'], ['2026 서울강남노회 남선교회 체육대회', '2026. 6'], ['2026 성경암송대회', '2026. 6'],
@@ -1263,19 +1267,21 @@ class Component extends DCLogic {
         ]},
         { title: '원로장로', members: [
           { id: 'staff-choi-jeongin', file: '교회소개_원로장로_최정인.jpg', src: pic('교회소개_원로장로_최정인'), name: '최정인', role: '원로장로', email: '', duties: [] },
+          { id: 'staff-ahn-gapjun', file: '교회소개_원로장로_안갑준.jpg', src: pic('교회소개_원로장로_안갑준'), name: '안갑준', role: '원로장로', email: '', duties: [] },
         ]},
         { title: '시무장로', members: [
-          { id: 'staff-ahn-gapjun', file: '교회소개_시무장로_안갑준.jpg', src: pic('교회소개_시무장로_안갑준'), name: '안갑준', role: '시무장로', email: '', duties: ['선교위원회 위원장'] },
-          { id: 'staff-kim-jonggi', file: '교회소개_시무장로_김종기.jpg', src: pic('교회소개_시무장로_김종기'), name: '김종기', role: '시무장로', email: 'jonggyee@hanmail.net', duties: ['봉사위원회 위원장'] },
           { id: 'staff-kim-yeonggyu', file: '교회소개_시무장로_김영규.jpg', src: pic('교회소개_시무장로_김영규'), name: '김영규', role: '시무장로', email: 'mtkimyg@hanmail.net', duties: ['예배위원회 위원장', '감사위원회 위원장'] },
-          { id: 'staff-yoo-jongsik', file: '교회소개_시무장로_유종식.jpg', src: pic('교회소개_시무장로_유종식'), name: '유종식', role: '시무장로', email: '', duties: ['관리위원회 위원장'] },
           { id: 'staff-park-seonghun', file: '교회소개_시무장로_박성훈.jpg', src: pic('교회소개_시무장로_박성훈'), name: '박성훈', role: '시무장로', email: '', duties: ['재정위원회 위원장'] },
           { id: 'staff-jang-myeongpil', file: '교회소개_시무장로_장명필.jpg', src: pic('교회소개_시무장로_장명필'), name: '장명필', role: '시무장로', email: '', duties: ['교육위원회 위원장'] },
+          { id: 'staff-ahn-daehwan', file: '교회소개_시무장로_안대환.jpg', src: pic('교회소개_시무장로_안대환'), name: '안대환', role: '시무장로', email: '', duties: [] },
+          { id: 'staff-lee-youngsu', file: '교회소개_시무장로_이영수.jpg', src: pic('교회소개_시무장로_이영수'), name: '이영수', role: '시무장로', email: '', duties: [] },
         ]},
         { title: '은퇴장로', members: [
           { id: 'staff-lee-sangrae', file: '교회소개_은퇴장로_이상래.jpg', src: pic('교회소개_은퇴장로_이상래'), name: '이상래', role: '은퇴장로', email: '', duties: [] },
           { id: 'staff-yoon-jinwoo', file: '교회소개_은퇴장로_윤진우.jpg', src: pic('교회소개_은퇴장로_윤진우'), name: '윤진우', role: '은퇴장로', email: 'jhinwooyoon@hanmail.net', duties: [] },
           { id: 'staff-hwang-seonyong', file: '교회소개_은퇴장로_황선용.jpg', src: pic('교회소개_은퇴장로_황선용'), name: '황선용', role: '은퇴장로', email: '', duties: [] },
+          { id: 'staff-kim-jonggi', file: '교회소개_은퇴장로_김종기.jpg', src: pic('교회소개_은퇴장로_김종기'), name: '김종기', role: '은퇴장로', email: 'jonggyee@hanmail.net', duties: [] },
+          { id: 'staff-yoo-jongsik', file: '교회소개_은퇴장로_유종식.jpg', src: pic('교회소개_은퇴장로_유종식'), name: '유종식', role: '은퇴장로', email: '', duties: [] },
         ]},
       ],
     };
