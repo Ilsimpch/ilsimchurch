@@ -1228,6 +1228,7 @@ class Component extends DCLogic {
       this.setState({ albums: albums, people: people, albumErr: false });
       this.saveAlbums(albums, people);
       const want = albums.filter((a) => a.kind === 'album').slice(0, 12).map((a) => a.id);
+      albums.filter((a) => a.kind === 'album' && a.dept.indexOf('행사') >= 0).slice(0, 4).forEach((a) => { if (!want.includes(a.id)) want.push(a.id); });
       if (this.state.albumOpen && !want.includes(this.state.albumOpen)) want.push(this.state.albumOpen);
       await this.ensurePhotos(want, true);
     } catch (e) {
@@ -1428,11 +1429,15 @@ class Component extends DCLogic {
       const pid = key ? peopleMap[key] : '';
       return { slot: !albumCfg, live: !!albumCfg, photo: pid ? this.driveImg(pid, 480) : '', photoId: pid, label: name + (pid ? ' 사진' : '') };
     };
+    // The home page shows the newest of the 교회 행사 folder (the ones that already have photos first).
+    const homeDept = albumDepts.find((d) => d.indexOf('행사') >= 0) || '';
+    const homePool = homeDept ? allAlbums.filter((a) => a.dept === homeDept) : allAlbums;
+    const homePick = homePool.filter((a) => a.count > 0).concat(homePool.filter((a) => !(a.count > 0))).slice(0, 4);
     const liveAlbum = {
       albumLive: !!albumCfg, albumSlots: !albumCfg,
       albumErr: !!albumCfg && st.albumErr,
       albumDriveHref: albumCfg ? 'https://drive.google.com/drive/folders/' + albumCfg.root : '#',
-      albumHomeLive: allAlbums.slice(0, 4).map(albumCard),
+      albumHomeLive: homePick.map(albumCard),
       albumListing: !!albumCfg && !openA, albumViewing: !!albumCfg && !!openA,
       albumTabs: (albumDepts.length > 1 ? [''].concat(albumDepts) : []).map((d) => ({
         label: d || '전체', go: this.pickAlbumDept(d), current: d === st.albumDept ? 'true' : undefined,
