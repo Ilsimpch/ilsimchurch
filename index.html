@@ -490,6 +490,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       .m-1col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px 12px !important; }
       .m-2col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 12px !important; }
       .m-photo, .m-photo image-slot { width: 100% !important; height: auto !important; aspect-ratio: 4 / 5; }
+      .m-photo .m-face { height: 100% !important; }
       .m-photo { max-width: 132px; }
       .dept-tabs { gap: 8px 18px !important; }
       .alb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 6px !important; }
@@ -696,7 +697,17 @@ textarea.input { min-height: 90px; resize: vertical; }
             <sc-for list="{{ g.members }}" as="m" hint-placeholder-count="2">
               <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start;">
                 <div class="m-photo" style="width: 168px; height: 210px; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
-                  <image-slot id="{{ m.id }}" shape="rect" fit="cover" src="{{ m.src }}" placeholder="{{ m.file }}" role="img" aria-label="{{ m.name }} {{ m.role }}" style="width: 168px; height: 210px; display: block;"></image-slot>
+                  <sc-if value="{{ m.slot }}" hint-placeholder-val="{{ true }}">
+                    <image-slot id="{{ m.id }}" shape="rect" fit="cover" src="{{ m.src }}" placeholder="{{ m.file }}" role="img" aria-label="{{ m.name }} {{ m.role }}" style="width: 168px; height: 210px; display: block;"></image-slot>
+                  </sc-if>
+                  <sc-if value="{{ m.live }}" hint-placeholder-val="{{ false }}">
+                    <div class="m-face" role="img" aria-label="{{ m.label }}" style="position: relative; width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center;">
+                      <svg viewBox="0 0 64 80" aria-hidden="true" style="width: 62%; display: block; opacity: 0.28; color: var(--color-neutral-600);"><circle cx="32" cy="30" r="14" fill="currentColor"></circle><path d="M6 80c0-16 11.5-27 26-27s26 11 26 27z" fill="currentColor"></path></svg>
+                      <sc-if value="{{ m.photo }}" hint-placeholder-val="{{ false }}">
+                        <img src="{{ m.photo }}" data-fid="{{ m.photoId }}" data-w="480" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block;">
+                      </sc-if>
+                    </div>
+                  </sc-if>
                 </div>
                 <div style="min-width: 0;">
                   <p style="margin: 0; font-size: 21px; line-height: 28px; font-family: var(--font-heading); font-weight: 600;">{{ m.name }}</p>
@@ -1007,8 +1018,10 @@ textarea.input { min-height: 90px; resize: vertical; }
 <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
   <div class="lb" role="dialog" aria-label="사진 크게 보기" onClick="{{ lbClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(12, 16, 20, 0.94); display: flex; align-items: center; justify-content: center;">
     <img src="{{ lbSrc }}" data-fid="{{ lbId }}" data-w="1600" alt="{{ lbAlt }}" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" onClick="{{ lbStop }}" style="max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 4px; display: block;">
-    <button type="button" class="lb-btn" aria-label="이전 사진" onClick="{{ lbPrev }}" style="left: 12px; top: 50%; transform: translateY(-50%);">‹</button>
-    <button type="button" class="lb-btn" aria-label="다음 사진" onClick="{{ lbNext }}" style="right: 12px; top: 50%; transform: translateY(-50%);">›</button>
+    <sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">
+      <button type="button" class="lb-btn" aria-label="이전 사진" onClick="{{ lbPrev }}" style="left: 12px; top: 50%; transform: translateY(-50%);">‹</button>
+      <button type="button" class="lb-btn" aria-label="다음 사진" onClick="{{ lbNext }}" style="right: 12px; top: 50%; transform: translateY(-50%);">›</button>
+    </sc-if>
     <button type="button" class="lb-btn" aria-label="닫기" onClick="{{ lbClose }}" style="right: 12px; top: 12px; font-size: 26px;">×</button>
     <span style="position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 15px; letter-spacing: 0.06em; opacity: 0.8;">{{ lbCount }}</span>
   </div>
@@ -1016,7 +1029,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"season":{"editor":"enum","options":["auto","winter","summer"],"default":"auto","tsType":"string","section":"예배 시간"},"youtubeId":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"youtubeIdOpen":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"youtubeIdWed":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 수요예배"},"youtubeIdDawn":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 새벽예배"},"youtubeIdFri":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 금요기도회"},"videoMode":{"editor":"enum","options":["auto","live"],"default":"auto","tsType":"string","section":"기타"},"channelUrl":{"editor":"text","default":"","tsType":"string","section":"기타"},"$preview":{"width":1280,"height":2700}}'>
 class Component extends DCLogic {
-  state = { page: 'home', dept: 0, newsOpen: false, vids: null, albums: null, albumErr: false, albumDept: '', albumShow: 12, albumOpen: null, photoRev: 0, lb: null };
+  state = { page: 'home', dept: 0, newsOpen: false, vids: null, albums: null, albumErr: false, albumDept: '', albumShow: 12, albumOpen: null, photoRev: 0, lb: null, lbSolo: null, people: null };
   // One YouTube playlist per service. The channel keeps each newest-first.
   playlists = {
     sunday: 'PL22_WjwmV4sYWhPrUAcTdLMT98NFzQMUm',
@@ -1155,41 +1168,66 @@ class Component extends DCLogic {
     }
     return out;
   }
-  saveAlbums(albums) {
-    try { localStorage.setItem('ilsim.albums.v1', JSON.stringify({ t: this._albumT || Date.now(), albums: albums })); } catch (e) {}
+  saveAlbums(albums, people) {
+    if (people !== undefined) this._people = people;
+    try { localStorage.setItem('ilsim.albums.v2', JSON.stringify({ t: this._albumT || Date.now(), albums: albums, people: this._people || null })); } catch (e) {}
   }
+  // What the Drive folder holds:
+  //   홈페이지 앨범 › (부서) › "2026.11 행사 이름" › photos   → an album (cover, 사진 n장, its own page)
+  //   홈페이지 앨범 › (부서) › photo                          → shown on its own: file name + the day it was uploaded
+  //   홈페이지 앨범 › "_섬기는 분들 사진" › "이름.jpg"         → that person's photo on 교회소개
+  // Folders whose name starts with "_" are never albums. Everything is listed newest first.
   async loadAlbums() {
     const cfg = this.albumCfg();
     if (!cfg) return;
-    // The last list shows at once; after 5 minutes Drive is asked again behind it.
+    // The last result shows at once; after 5 minutes Drive is asked again behind it.
     let last = null;
     try {
-      const c = JSON.parse(localStorage.getItem('ilsim.albums.v1') || 'null');
+      const c = JSON.parse(localStorage.getItem('ilsim.albums.v2') || 'null');
       if (c && Array.isArray(c.albums)) {
-        last = c.albums; this._albumT = c.t;
-        this.setState({ albums: last });
+        last = c.albums; this._albumT = c.t; this._people = c.people || null;
+        this.setState({ albums: last, people: this._people });
         if (Date.now() - c.t < 5 * 60 * 1000) return;
       }
     } catch (e) {}
     try {
-      const FOLDER = "mimeType = 'application/vnd.google-apps.folder'";
-      const depts = await this.driveList("'" + cfg.root + "' in parents and " + FOLDER, 'id,name', 'name');
-      const lists = await Promise.all(depts.map((d) => this.driveList("'" + d.id + "' in parents and " + FOLDER, 'id,name', 'name desc')));
+      const isFolder = (f) => f.mimeType === 'application/vnd.google-apps.folder';
+      const MIX = "(mimeType = 'application/vnd.google-apps.folder' or mimeType contains 'image/')";
+      const FIELDS = 'id,name,mimeType,createdTime';
+      const top = await this.driveList("'" + cfg.root + "' in parents and " + MIX, FIELDS, 'name');
+      const hidden = (f) => f.name.trim().charAt(0) === '_';
+      const depts = top.filter((f) => isFolder(f) && !hidden(f));
+      const peopleDir = top.find((f) => isFolder(f) && hidden(f) && f.name.indexOf('섬기는') >= 0);
+      const [lists, peopleFiles] = await Promise.all([
+        Promise.all(depts.map((d) => this.driveList("'" + d.id + "' in parents and " + MIX, FIELDS, 'createdTime desc'))),
+        peopleDir ? this.driveList("'" + peopleDir.id + "' in parents and mimeType contains 'image/'", 'id,name', 'name').catch(() => []) : Promise.resolve([]),
+      ]);
       const old = {}; (last || []).forEach((a) => { old[a.id] = a; });
+      const day = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate(); };
       const albums = [];
-      depts.forEach((d, i) => lists[i].forEach((f) => {
-        // "2026.11 추수감사주일" → title "2026 추수감사주일", date "2026. 11"
-        const m = f.name.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*월?\s+(.+)$/);
-        const o = old[f.id] || {};
-        albums.push({ id: f.id, name: f.name, dept: d.name, title: m ? m[1] + ' ' + m[3] : f.name, date: m ? m[1] + '. ' + Number(m[2]) : '',
-          sort: m ? m[1] + String(m[2]).padStart(2, '0') : '', count: o.count, cover: o.cover });
-      }));
+      const add = (f, dept) => {
+        if (hidden(f)) return;
+        if (isFolder(f)) {
+          // "2026.11 추수감사주일" → title "2026 추수감사주일", date "2026. 11"; without the prefix, the day the folder was made
+          const m = f.name.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*월?\s+(.+)$/);
+          const o = old[f.id] || {};
+          albums.push({ id: f.id, kind: 'album', name: f.name, dept: dept, title: m ? m[1] + ' ' + m[3] : f.name, date: m ? m[1] + '. ' + Number(m[2]) : day(f.createdTime),
+            sort: m ? m[1] + '-' + String(m[2]).padStart(2, '0') + '-00' : (f.createdTime || ''), count: o.count, cover: o.cover });
+        } else {
+          // a photo on its own: its file name is the caption, the upload day its date
+          albums.push({ id: f.id, kind: 'photo', name: f.name, dept: dept, title: f.name.replace(/\.[A-Za-z0-9]{2,5}$/, ''), date: day(f.createdTime),
+            sort: f.createdTime || '', count: 1, cover: f.id });
+        }
+      };
+      top.filter((f) => !isFolder(f)).forEach((f) => add(f, ''));
+      depts.forEach((d, i) => lists[i].forEach((f) => add(f, d.name)));
       albums.sort((a, b) => (b.sort || '').localeCompare(a.sort || '') || a.name.localeCompare(b.name, 'ko'));
+      const people = {}; peopleFiles.forEach((f) => { people[f.name.replace(/\.[A-Za-z0-9]{2,5}$/, '').replace(/\s/g, '')] = f.id; });
       this._albumT = Date.now();
       if (!this._alive) return;
-      this.setState({ albums: albums, albumErr: false });
-      this.saveAlbums(albums);
-      const want = albums.slice(0, 12).map((a) => a.id);
+      this.setState({ albums: albums, people: people, albumErr: false });
+      this.saveAlbums(albums, people);
+      const want = albums.filter((a) => a.kind === 'album').slice(0, 12).map((a) => a.id);
       if (this.state.albumOpen && !want.includes(this.state.albumOpen)) want.push(this.state.albumOpen);
       await this.ensurePhotos(want, true);
     } catch (e) {
@@ -1221,30 +1259,36 @@ class Component extends DCLogic {
     this.saveAlbums(albums);
   }
   albumsShown(s) { return (s.albums || []).filter((a) => !s.albumDept || a.dept === s.albumDept).slice(0, s.albumShow); }
-  ensureShown() { this.ensurePhotos(this.albumsShown(this.state).filter((a) => a.count === undefined).map((a) => a.id)); }
+  ensureShown() { this.ensurePhotos(this.albumsShown(this.state).filter((a) => a.kind === 'album' && a.count === undefined).map((a) => a.id)); }
   openAlbum(id) {
     return (e) => {
       if (e && e.preventDefault) e.preventDefault();
-      this.setState({ page: 'story', albumOpen: id, lb: null });
+      this.setState({ page: 'story', albumOpen: id, lb: null, lbSolo: null });
       history.replaceState(null, '', '#story');
       this.ensurePhotos([id]);
       setTimeout(() => { const el = document.getElementById('albums'); if (el) scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76 }); }, 80);
     };
   }
-  albumBack = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumOpen: null, lb: null }); };
+  albumBack = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumOpen: null, lb: null, lbSolo: null }); };
   pickAlbumDept(d) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumDept: d, albumShow: 12 }); setTimeout(() => this.ensureShown(), 0); }; }
   albumShowMore = () => { this.setState({ albumShow: this.state.albumShow + 12 }); setTimeout(() => this.ensureShown(), 0); };
   lbSet(i) {
     return (e) => {
       if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
-      this.setState({ lb: i });
+      this.setState({ lb: i, lbSolo: null });
+    };
+  }
+  lbShow(id, title) {
+    return (e) => {
+      if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
+      this.setState({ lbSolo: { id: id, title: title }, lb: null });
     };
   }
   lbStep(d) {
     return (e) => {
       if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
       const n = ((this._photos || {})[this.state.albumOpen] || []).length;
-      if (this.state.lb == null || !n) return;
+      if (this.state.lbSolo || this.state.lb == null || !n) return;
       this.setState({ lb: (this.state.lb + d + n) % n });
     };
   }
@@ -1275,8 +1319,8 @@ class Component extends DCLogic {
     this.loadLatest();
     this.loadAlbums();
     this._onKey = (e) => {
-      if (this.state.lb == null) return;
-      if (e.key === 'Escape') this.setState({ lb: null });
+      if (this.state.lb == null && !this.state.lbSolo) return;
+      if (e.key === 'Escape') this.setState({ lb: null, lbSolo: null });
       if (e.key === 'ArrowLeft') this.lbStep(-1)();
       if (e.key === 'ArrowRight') this.lbStep(1)();
     };
@@ -1286,7 +1330,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); removeEventListener('keydown', this._onKey); }
   go(page) {
-    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page, albumOpen: null, lb: null }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
+    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page, albumOpen: null, lb: null, lbSolo: null }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
   }
   jump(id) {
     return (e) => {
@@ -1367,16 +1411,23 @@ class Component extends DCLogic {
     const allAlbums = st.albums || [];
     const albumCard = (a) => ({
       id: a.id, title: a.title,
-      meta: [a.date, a.dept, a.count ? '사진 ' + a.count + '장' : ''].filter(Boolean).join(' · '),
+      meta: [a.date, a.dept, a.kind === 'album' && a.count ? '사진 ' + a.count + '장' : ''].filter(Boolean).join(' · '),
       cover: a.cover ? this.driveImg(a.cover, 640) : '', coverId: a.cover || '',
       empty: a.count === 0 ? '사진 준비 중' : '',
-      open: this.openAlbum(a.id),
+      open: a.kind === 'photo' ? this.lbShow(a.id, a.title) : this.openAlbum(a.id),
     });
-    const albumDepts = allAlbums.map((a) => a.dept).filter((d, i, arr) => arr.indexOf(d) === i);
+    const albumDepts = allAlbums.map((a) => a.dept).filter((d, i, arr) => d && arr.indexOf(d) === i);
     const albumInDept = allAlbums.filter((a) => !st.albumDept || a.dept === st.albumDept);
-    const openA = allAlbums.find((a) => a.id === st.albumOpen) || null;
+    const openA = allAlbums.find((a) => a.kind === 'album' && a.id === st.albumOpen) || null;
     const openPhotos = (openA && this._photos && this._photos[openA.id]) || null;
-    const lbP = openPhotos && st.lb != null ? openPhotos[st.lb] : null;
+    const lbP = st.lbSolo ? { id: st.lbSolo.id } : (openPhotos && st.lb != null ? openPhotos[st.lb] : null);
+    // 섬기는 분들 사진: a file in the Drive folder "_섬기는 분들 사진" whose name starts with the person's name.
+    const peopleMap = st.people || {};
+    const staffPhoto = (name) => {
+      const key = Object.keys(peopleMap).find((k) => k.indexOf(name) === 0);
+      const pid = key ? peopleMap[key] : '';
+      return { slot: !albumCfg, live: !!albumCfg, photo: pid ? this.driveImg(pid, 480) : '', photoId: pid, label: name + (pid ? ' 사진' : '') };
+    };
     const liveAlbum = {
       albumLive: !!albumCfg, albumSlots: !albumCfg,
       albumErr: !!albumCfg && st.albumErr,
@@ -1400,8 +1451,9 @@ class Component extends DCLogic {
       })),
       albumNote: !openA ? '' : !openPhotos ? '사진을 불러오는 중입니다…' : openPhotos.length ? '' : '아직 사진이 없습니다. 곧 올리겠습니다.',
       lbOpen: !!lbP, lbSrc: lbP ? this.driveImg(lbP.id, 1600) : '', lbId: lbP ? lbP.id : '',
-      lbAlt: lbP && openA ? openA.title + ' 사진 ' + (st.lb + 1) : '',
-      lbCount: lbP ? (st.lb + 1) + ' / ' + openPhotos.length : '',
+      lbAlt: st.lbSolo ? st.lbSolo.title : (lbP && openA ? openA.title + ' 사진 ' + (st.lb + 1) : ''),
+      lbCount: st.lbSolo ? st.lbSolo.title : (lbP ? (st.lb + 1) + ' / ' + openPhotos.length : ''),
+      lbMulti: !st.lbSolo && !!lbP && openPhotos.length > 1,
       lbPrev: this.lbStep(-1), lbNext: this.lbStep(1), lbClose: this.lbSet(null), lbStop: this.lbStop,
     };
     return {
@@ -1552,7 +1604,7 @@ class Component extends DCLogic {
           { id: 'staff-kim-jonggi', file: '교회소개_은퇴장로_김종기.jpg', src: pic('교회소개_은퇴장로_김종기'), name: '김종기', role: '은퇴장로', email: 'jonggyee@hanmail.net', duties: [] },
           { id: 'staff-yoo-jongsik', file: '교회소개_은퇴장로_유종식.jpg', src: pic('교회소개_은퇴장로_유종식'), name: '유종식', role: '은퇴장로', email: '', duties: [] },
         ]},
-      ],
+      ].map((g) => ({ ...g, members: g.members.map((m) => ({ ...m, ...staffPhoto(m.name) })) })),
     };
   }
 }
