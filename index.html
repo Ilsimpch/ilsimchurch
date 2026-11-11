@@ -433,6 +433,11 @@ textarea.input { min-height: 90px; resize: vertical; }
   .alb-photo:hover { box-shadow: 0 0 0 2px var(--color-accent-700); }
   .lb-btn { position: absolute; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0 0 4px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; }
   .lb-btn:hover { background: rgba(255, 255, 255, 0.26); }
+  /* 주보처럼 글씨를 읽는 그림: 화면 높이에 맞춰 줄이지 않고 크게 보여 주고, 아래로 내려 가며 본다 */
+  .lb.lb-read { align-items: flex-start !important; overflow-y: auto; overscroll-behavior: contain; }
+  .lb.lb-read > img { max-width: min(96vw, 1200px) !important; max-height: none !important; margin: 64px auto 40px; background: #fff; }
+  .lb.lb-read > .lb-btn { position: fixed; }
+  .lb.lb-read > span { position: fixed !important; top: 22px; bottom: auto !important; pointer-events: none; }
     body { margin: 0; text-wrap: pretty; font-size: 17px; line-height: 28px; word-break: keep-all; }
     a { color: var(--color-accent-700); text-decoration: none; }
     a:hover { color: var(--color-accent-600); text-decoration: underline; }
@@ -791,13 +796,14 @@ textarea.input { min-height: 90px; resize: vertical; }
 
     <section id="jubo" style="padding: 0 0 84px;">
       <h2 style="font-size: 24px; line-height: 28px; margin: 0 0 16px;">주보</h2>
-      <div class="m-2col" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+      <div class="m-2col" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: start;">
         <sc-for list="{{ bulletinCards }}" as="b" hint-placeholder-count="4">
           <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" onClick="{{ b.open }}" class="alb-card">
-            <div class="alb-cover" style="position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.08em;">{{ b.kind }}</span>
+            <!-- the picture keeps its own shape; the 4:3 box underneath only holds the place until it loads -->
+            <div class="alb-cover" style="display: grid; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
+              <span style="grid-area: 1 / 1; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.08em;">{{ b.kind }}</span>
               <sc-if value="{{ b.cover }}" hint-placeholder-val="{{ false }}">
-                <img src="{{ b.cover }}" data-fid="{{ b.id }}" data-w="640" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; background: #fff;">
+                <img src="{{ b.cover }}" data-fid="{{ b.id }}" data-w="640" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="grid-area: 1 / 1; align-self: center; width: 100%; height: auto; display: block; background: #fff;">
               </sc-if>
             </div>
             <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ b.label }}</div>
@@ -971,7 +977,7 @@ textarea.input { min-height: 90px; resize: vertical; }
           <p style="display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 16.5px; line-height: 28px;">
             <span>{{ b.label }}</span>
             <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.34em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
-            <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" style="white-space: nowrap;">{{ b.kind }}</a>
+            <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" onClick="{{ b.open }}" style="white-space: nowrap;">{{ b.kind }}</a>
           </p>
         </sc-for>
         <sc-if value="{{ bulletinNone }}" hint-placeholder-val="{{ false }}">
@@ -1050,7 +1056,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 
 <!-- 사진 크게 보기 -->
 <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
-  <div class="lb" role="dialog" aria-label="사진 크게 보기" onClick="{{ lbClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(12, 16, 20, 0.94); display: flex; align-items: center; justify-content: center;">
+  <div class="lb {{ lbMode }}" role="dialog" aria-label="사진 크게 보기" onClick="{{ lbClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(12, 16, 20, 0.94); display: flex; align-items: center; justify-content: center;">
     <img src="{{ lbSrc }}" data-fid="{{ lbId }}" data-w="1600" alt="{{ lbAlt }}" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" onClick="{{ lbStop }}" style="max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 4px; display: block;">
     <sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">
       <button type="button" class="lb-btn" aria-label="이전 사진" onClick="{{ lbPrev }}" style="left: 12px; top: 50%; transform: translateY(-50%);">‹</button>
@@ -1366,10 +1372,10 @@ class Component extends DCLogic {
       this.setState({ lb: i, lbSolo: null });
     };
   }
-  lbShow(id, title) {
+  lbShow(id, title, read) {
     return (e) => {
       if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
-      this.setState({ lbSolo: { id: id, title: title }, lb: null });
+      this.setState({ lbSolo: { id: id, title: title, read: !!read }, lb: null });
     };
   }
   lbStep(d) {
@@ -1510,6 +1516,7 @@ class Component extends DCLogic {
     const openA = allAlbums.find((a) => a.kind === 'album' && a.id === st.albumOpen) || null;
     const openPhotos = (openA && this._photos && this._photos[openA.id]) || null;
     const lbP = st.lbSolo ? { id: st.lbSolo.id } : (openPhotos && st.lb != null ? openPhotos[st.lb] : null);
+    const lbRead = !!(st.lbSolo && st.lbSolo.read);
     // 섬기는 분들 사진: a file in the Drive folder "_섬기는 분들 사진" whose name starts with the person's name.
     const peopleMap = st.people || {};
     const staffPhoto = (name) => {
@@ -1526,7 +1533,7 @@ class Component extends DCLogic {
     const bulletinList = albumCfg
       ? (st.bulletins || []).map((b) => {
         const dm = (b.sort || '').match(/^\d{4}-(\d{2})-(\d{2})/);
-        return { id: b.id, label: b.label, short: dm ? Number(dm[1]) + '월 ' + Number(dm[2]) + '일' : b.label, kind: b.kind, cover: this.driveImg(b.id, 640), href: 'https://drive.google.com/file/d/' + b.id + '/view', target: '_blank', open: b.kind === 'PDF' ? noop : this.lbShow(b.id, b.label) };
+        return { id: b.id, label: b.label, short: dm ? Number(dm[1]) + '월 ' + Number(dm[2]) + '일' : b.label, kind: b.kind, cover: this.driveImg(b.id, 640), href: 'https://drive.google.com/file/d/' + b.id + '/view', target: '_blank', open: b.kind === 'PDF' ? noop : this.lbShow(b.id, b.label, true) };
       })
       : ['9월 27일', '9월 20일', '9월 13일'].map((d) => ({ id: '', label: '2026년 ' + d + ' 주보', short: d, kind: 'PDF', cover: '', href: '#', target: undefined, open: noop }));
     // 교회 일정 · 교회 소식 from the two Google Sheets (published site). 일정: rows whose day (or last day) has
@@ -1588,7 +1595,7 @@ class Component extends DCLogic {
         alt: (openA ? openA.title : '') + ' 사진 ' + (i + 1), open: this.lbSet(i),
       })),
       albumNote: !openA ? '' : !openPhotos ? '사진을 불러오는 중입니다…' : openPhotos.length ? '' : '아직 사진이 없습니다. 곧 올리겠습니다.',
-      lbOpen: !!lbP, lbSrc: lbP ? this.driveImg(lbP.id, 1600) : '', lbId: lbP ? lbP.id : '',
+      lbOpen: !!lbP, lbSrc: lbP ? this.driveImg(lbP.id, lbRead ? 2400 : 1600) : '', lbId: lbP ? lbP.id : '', lbMode: lbRead ? 'lb-read' : '',
       lbAlt: st.lbSolo ? st.lbSolo.title : (lbP && openA ? openA.title + ' 사진 ' + (st.lb + 1) : ''),
       lbCount: st.lbSolo ? st.lbSolo.title : (lbP ? (st.lb + 1) + ' / ' + openPhotos.length : ''),
       lbMulti: !st.lbSolo && !!lbP && openPhotos.length > 1,
