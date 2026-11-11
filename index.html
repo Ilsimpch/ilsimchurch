@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>일심교회</title>
+<meta name="description" content="대한예수교장로회 일심교회 — 서울 강남구 대치동. 예배 안내, 예배 영상, 교회 소식.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script src="assets/react.production.min.js"></script>
+<script src="assets/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+<script src="assets/broadsheet-bundle.js"></script>
+<script src="assets/image-slot.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+  <style>/* Broadsheet — design-system tokens and component classes. This file is the source of truth for the system's look; retune it here and see readme.md. */
+:root {
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201e1d;
+  --color-accent: #0088b0;
+  --color-accent-2: #d6006c;
+  --color-divider: color-mix(in srgb, #201e1d 16%, transparent);
+
+  /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
+     same step of any role matches the others in visual value. */
+  --color-neutral-100: #f8f4f4;
+  --color-neutral-200: #eae7e7;
+  --color-neutral-300: #d7d3d3;
+  --color-neutral-400: #bab6b6;
+  --color-neutral-500: #9b9797;
+  --color-neutral-600: #7d7979;
+  --color-neutral-700: #605d5d;
+  --color-neutral-800: #444141;
+  --color-neutral-900: #2d2b2b;
+
+  --color-accent-100: #e9f8ff;
+  --color-accent-200: #cbeeff;
+  --color-accent-300: #99e0ff;
+  --color-accent-400: #62c5ee;
+  --color-accent-500: #38a6cf;
+  --color-accent-600: #1186ac;
+  --color-accent-700: #006786;
+  --color-accent-800: #004961;
+  --color-accent-900: #0a303e;
+
+  --color-accent-2-100: #fff1f4;
+  --color-accent-2-200: #ffdee6;
+  --color-accent-2-300: #ffc0d0;
+  --color-accent-2-400: #ff90b1;
+  --color-accent-2-500: #ff458e;
+  --color-accent-2-600: #d82071;
+  --color-accent-2-700: #aa0b56;
+  --color-accent-2-800: #790e3d;
+  --color-accent-2-900: #4b1528;
+
+  /* The third process ink — review round 3: the deck's print treatments
+     (the CMYK separation and the misregistered plate numerals below) need
+     the full four-color set. Cyan and magenta are the system's own accents;
+     this yellow completes them, muted to the same press-ink register. A
+     print treatment color, not an interface accent — body copy and chrome
+     never take it. */
+  --color-process-yellow: #edbb00;
+
+  --font-heading: "Source Serif 4", system-ui, sans-serif;
+  --font-heading-weight: 600;
+  --font-body: "Source Serif 4", system-ui, sans-serif;
+
+  --space-1: 5.0px;
+  --space-2: 10.0px;
+  --space-3: 15.0px;
+  --space-4: 20.0px;
+  --space-6: 30.0px;
+  --space-8: 40.0px;
+
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+
+  /* Elevation — derived from the ground: soft ink-tinted shadows on a
+     light theme, a hairline edge + ambient darkness on a dark one. */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+.halftone{position:relative;filter:grayscale(0.35) contrast(1.15);overflow:hidden}
+.halftone::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(0,0,0,0.22) 30%,transparent 32%);
+  background-size:3px 3px;mix-blend-mode:multiply}
+
+/* The four-color separation treatment (review round 3) — a photograph
+   printed as its misregistered process plates, after the Catalogue Three
+   grammar. Markup: a figure.cmyk holding five copies of the image — the
+   first is the layout sizer (hidden), then one per plate, each tagged
+   .sep-c/.sep-m/.sep-y/.sep-k. The plates are extracted live by the SVG
+   feColorMatrix filters in print-plates.js, the system's own defs —
+   inlined in the compiled bundle every template page loads, and a
+   page that links styles.css directly adds
+   <script src="print-plates.js"></script> itself (the defs must be in
+   the document: a data-URI filter reference would not survive Chromium,
+   and external-file references are unreliable across engines) — nudged
+   a few pixels out of register, and multiplied
+   onto the paper ground; the halftone dot screens the recombined print.
+   The plate offsets live with the deck's projection-scale CSS, since
+   misregistration is sized to the output. */
+.cmyk{position:relative;overflow:hidden;background:var(--color-bg)}
+.cmyk img:first-child{opacity:0} /* layout sizer AND the alt-bearing image — opacity
+  keeps it in the accessibility tree (visibility:hidden would drop the figure's only
+  description); fully transparent, it adds nothing to the multiply backdrop */
+.cmyk img+img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply}
+.cmyk .sep-c{filter:url(#sep-c)}
+.cmyk .sep-m{filter:url(#sep-m)}
+.cmyk .sep-y{filter:url(#sep-y)}
+.cmyk .sep-k{filter:url(#sep-k)}
+.cmyk::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(0,0,0,0.22) 30%,transparent 32%);
+  background-size:3px 3px;mix-blend-mode:multiply}
+
+/* The one-image separation (review round 9, promoted from the deck in the
+   landing divergence) — the same four plates as ONE compound filter,
+   #sep-all in print-plates.js, for a single swappable image: a .print
+   wrapper inside the figure holds one <image-slot>, and the filter
+   extracts, offsets and multiplies the plates live from whatever the slot
+   shows. Markup: figure.cmyk > .print > image-slot (the page sizes the
+   .print — aspect-ratio, or absolute fill for bleeds). Hover resolves
+   the print into the photograph — the pressman checking registration on
+   the light table — so the source shows crisp and any swap chrome stays
+   legible; only the reduced-motion fallback below still lifts as a
+   single cut (a url() filter cannot CSS-transition; the press driver
+   animates the defs instead). */
+.cmyk .print{position:relative;width:100%;filter:url(#sep-all)}
+/* no hover end-state swap: the press driver (print-plates.js) eases the
+   plates into register while purifying their inks to the pure-process
+   separation on the same curve, so the converged four-plate merge IS
+   the photograph (their multiply equals SourceGraphic by construction)
+   — no cut anywhere on the animated path */
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .cmyk .print:hover{filter:none} /* without the driver (it stands down on
+    exactly these conditions), hover stays the old single cut to the
+    crisp source */
+}
+.cmyk .print image-slot{width:100%;height:100%;display:block}
+
+/* The plate numeral (review rounds 3-4) — display figures set as
+   misregistered process plates, the catalog's cover grammar. Review
+   round 4 (Barron): THREE plates — C, M, Y only, no black plate — so the
+   dark core comes entirely from the C×M×Y multiply overlap (the inks
+   product to exact black), with the fringes the registration drift; and
+   the spread pulled in by half (less jumbled: one figure with plate
+   fringes rather than figures sliding apart). Markup: a .cmyk-num holding
+   a .paper span (the white of the sheet: the glyph's union, built from
+   offset text-shadow copies) and three .plate spans. The construction
+   carries its own ground (--cmyk-num-ground, defaulting to paper) painted
+   on its padding box, so the multiply plates always have their backdrop
+   even inside an isolated stacking context (entrance animations); the
+   padding bleeds wider than any plate offset and the negative margin
+   hands the layout box back. Offsets are em-scaled to the glyph. The
+   .paper span carries the text once for assistive tech; the .plate spans
+   are aria-hidden repeats. */
+.cmyk-num{--cmyk-num-ground:var(--color-bg);
+  position:relative;width:fit-content;line-height:0.9;
+  font-feature-settings:"pnum" 1;
+  background:var(--cmyk-num-ground);padding:0.12em;margin:-0.12em}
+.cmyk-num .paper{color:var(--color-bg); /* the white of the sheet — always paper,
+  whatever the ground: the plates read as printed on paper even when the
+  surrounding page is ink */
+  text-shadow:0.036em 0.025em 0 var(--color-bg),-0.031em -0.023em 0 var(--color-bg)}
+.cmyk-num .plate{position:absolute;inset:0.12em;mix-blend-mode:multiply;
+  text-box:trim-both cap alphabetic /* the host trims to its cap box; each
+  absolute plate must trim its own line the same way, or its glyphs sit a
+  half-leading below the paper union */}
+.cmyk-num .plate-c{color:var(--color-accent)}
+
+/* The plate headline (divergence round 3, Barron: "use both" — the
+   photograph's plates AND the cover grammar's text plates, on the same
+   page). The same three-plate construction as .cmyk-num — paper span
+   carrying the real text, C/M/Y plate repeats, dark core from the
+   multiply overlap — at HALF the numeral's round-4 offsets: the serif's
+   display hairlines are thinner than the numeral strokes the spread was
+   measured on, and the full offsets swallow them whole (probed at the
+   hero's 80px — the fringes read as an anaglyph poster, not a breath
+   out of register) — recut for display
+   headlines that sit in running text blocks on the page's own paper:
+   no ground painting and no padding bleed (the numeral's ground exists
+   for isolated stacking contexts; a headline on the page multiplies
+   straight onto the sheet), no width:fit-content and no line-height
+   override (the host display class owns its metrics — apply this to
+   each .line, which is position:relative for its plates), and the
+   plates are inert to the hand (pointer-events/user-select none, so a
+   triple-click selects the headline once, not four times). Plates take
+   the same pointer lean as .cmyk-num. */
+.cmyk-head{position:relative}
+.cmyk-head .paper{color:var(--color-bg);
+  text-shadow:0.027em 0.0185em 0 var(--color-bg),-0.0245em -0.0175em 0 var(--color-bg)
+  /* the union's copies sit at the construction's halved plate offsets
+     PLUS the full lean (0.018+0.009 / 0.0125+0.006, and mirrored), so
+     the union still backs the plates at viewport-edge lean — invisible
+     on the page's own paper, load-bearing on any other ground */}
+.cmyk-head .plate{position:absolute;inset:0;mix-blend-mode:multiply;
+  pointer-events:none;user-select:none;
+  text-box:trim-both cap alphabetic /* match the host's trim, or the
+  plates sit a half-leading below the paper union */}
+.cmyk-head .plate-c{color:var(--color-accent)}
+.cmyk-head .plate-m{color:var(--color-accent-2);
+  translate:calc(0.018em + 0.009em*var(--press-nx, 0)) calc(0.0125em + 0.006em*var(--press-ny, 0))}
+.cmyk-head .plate-y{color:var(--color-process-yellow);
+  translate:calc(-0.0155em + 0.009em*var(--press-nx, 0)) calc(-0.0115em + 0.006em*var(--press-ny, 0))}
+.cmyk-num .plate-m{color:var(--color-accent-2);
+  translate:calc(0.036em + 0.018em*var(--press-nx, 0)) calc(0.025em + 0.0125em*var(--press-ny, 0))}
+.cmyk-num .plate-y{color:var(--color-process-yellow);
+  translate:calc(-0.031em + 0.018em*var(--press-nx, 0)) calc(-0.023em + 0.0125em*var(--press-ny, 0))}
+/* --press-nx/--press-ny: the pointer lean as a bare -1..1 factor,
+   published on :root by the press driver (print-plates.js) and zero
+   whenever the driver stands down. Each construction scales the lean to
+   its own spread (half of it, here as everywhere) so the moving plates
+   drift a breath toward the cursor and the C plate holds. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Components — built with the tokens above. Plain CSS
+   on plain HTML: no JavaScript, no build step. Each class is documented in
+   readme.md and demonstrated in foundations/ and components/.
+   ══════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; }
+h6 { letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+figcaption {
+  font-size: 11px; margin-top: var(--space-1);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — rules — */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 14px; line-height: 1.2; color: var(--color-text); /* matches the .input's 14px —
+     the pair sits side by side in sign-up rows */
+  background: transparent; border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: var(--radius-md);
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--color-accent); color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-accent-600); }
+.btn-primary:active { background: var(--color-accent-700); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — forms — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.input::placeholder { color: color-mix(in srgb, var(--color-text) 65%, transparent); opacity: 1; }
+  /* explicit, measured: the browser default gray misses the 4.5:1 small-text bar on
+     the surface fill; 65% ink measures 4.8:1 there, still a step quieter than typed
+     text (opacity:1 overrides Firefox's default placeholder fade) */
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio input, .seg-opt input {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.radio .dot {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent); background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { background: var(--color-accent); color: var(--color-bg); }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
+}
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+.card-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; line-height: 1.2;
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta {
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px;
+  letter-spacing: 0.02em; padding: 3px 10px;
+  border-radius: calc(var(--radius-md) * 0.75);
+}
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-accent-2 { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — navigation — */
+.nav {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: none;
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+
+/* — tables — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2); border-bottom: 1px solid var(--color-divider);
+}
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+.table tbody tr:hover { background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+
+/* — dialog — */
+.dialog-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
+}
+.dialog {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface); box-shadow: var(--shadow-lg);
+}
+.dialog-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px;
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+
+</style>
+  <style></style>
+  <style>
+    :root { --font-heading: "Source Serif 4", "Noto Serif KR", serif; --font-body: "Source Serif 4", "Noto Serif KR", serif; }
+    html { scroll-behavior: smooth; }
+  .yt-tile:hover .yt-play, .yt-tile:focus-visible .yt-play { background: var(--color-accent-700) !important; }
+  .yt-poster-sunday { background-image: url(assets/poster-sunday.webp); }
+  .yt-poster-wed { background-image: url(assets/poster-wed.webp); }
+  .yt-poster-fri { background-image: url(assets/poster-fri.webp); }
+  .yt-poster-dawn { background-image: url(assets/poster-dawn.webp); }
+    body { margin: 0; text-wrap: pretty; font-size: 17px; line-height: 28px; word-break: keep-all; }
+    a { color: var(--color-accent-700); text-decoration: none; }
+    a:hover { color: var(--color-accent-600); text-decoration: underline; }
+    .nav a { color: var(--color-text); font-size: 15.5px; }
+  .btn { font-size: 15.5px; }
+  .table { font-size: 15.5px; }
+    .nav a[aria-current="page"] { color: var(--color-accent-700); }
+    .nav a:hover { color: var(--color-accent-700); text-decoration: none; }
+    .table th, .table td { padding: 12px 14px; }
+    .table thead th { font-size: 14.5px; letter-spacing: 0.06em; font-weight: 400; color: var(--color-neutral-700); }
+    @media (max-width: 640px) {
+      body { font-size: 16px; line-height: 23px; }
+      p, li, td, th, figcaption, blockquote { line-height: 1.45 !important; }
+      .nav { flex-wrap: wrap; row-gap: 4px; padding-block: 14px 0 !important; }
+      .nav .nav-brand { flex: 0 0 100%; }
+      .nav .nav-brand span { font-size: 22px !important; }
+      .nav .nav-brand svg { width: 32px; height: 32px; }
+      .nav-links { flex: 0 0 100%; flex-wrap: nowrap; justify-content: space-between; gap: 6px !important; padding: 10px 0 12px; }
+      .nav-links a { font-size: clamp(11.5px, 3.45vw, 14px); letter-spacing: -0.04em; flex: none; white-space: nowrap; line-height: 22px; padding-bottom: 3px; border-bottom: 2px solid transparent; }
+      .nav-links a[aria-current="page"] { border-bottom-color: var(--color-accent-700); }
+      .hero-sec { padding-top: 8px !important; padding-bottom: 20px !important; }
+      .hero-art { display: block !important; aspect-ratio: auto !important; background: transparent !important; overflow: visible !important; border-radius: 0 !important; }
+      .hero-img { position: static !important; height: auto !important; aspect-ratio: 16 / 10; object-position: 86% center !important; border-radius: var(--radius-md); }
+      .hero-wash { display: none !important; }
+      .hero-text { width: auto !important; padding: 18px 0 0 !important; }
+      h1 { font-size: 30px !important; line-height: 1.15 !important; }
+      h2 { font-size: 21px !important; line-height: 1.3 !important; }
+      h3 { font-size: 17px !important; line-height: 1.35 !important; }
+      .nav .nav-brand span { font-size: 20px !important; }
+      .pg-head { padding-top: 44px !important; padding-bottom: 32px !important; }
+      .m-wrap { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+      .hero-sec .hero-intro { font-size: 13px !important; line-height: 20px !important; text-align: left; justify-self: start; max-width: none !important; margin-top: 20px !important; }
+      .m-kicker { font-weight: 700 !important; color: var(--color-accent-700) !important; font-size: 18px !important; line-height: 24px !important; }
+      .m-vlabel { font-size: 14px !important; line-height: 20px !important; }
+      .m-more { margin-top: 8px !important; font-size: 13px !important; }
+      .m-sched { padding-bottom: 10px !important; }
+      .m-sched > span { font-size: 13px !important; line-height: 20px !important; }
+      .m-sched p:first-child { font-size: 14.5px !important; line-height: 20px !important; }
+      .m-sched p:last-child { font-size: 12.5px !important; line-height: 18px !important; }
+      .m-news { padding-bottom: 12px !important; }
+      .m-news h3 { font-size: 14.5px !important; line-height: 20px !important; }
+      .m-news p { font-size: 12.5px !important; line-height: 18px !important; }
+      .m-cap { font-size: 13px !important; line-height: 18px !important; margin-top: 6px !important; }
+      .m-cap span { font-size: 11.5px !important; }
+      .pg-head h1 { font-size: 24px !important; line-height: 30px !important; }
+      .pg-head p { font-size: 13px !important; line-height: 20px !important; margin-top: 14px !important; }
+      .m-sub h2 { font-size: 18px !important; line-height: 24px !important; }
+      .m-sub h3 { font-size: 14.5px !important; line-height: 20px !important; }
+      .m-sub p, .m-sub td, .m-sub th, .m-sub figcaption, .m-sub li { font-size: 13px !important; line-height: 19px !important; }
+      .m-sub .table th, .m-sub .table td { padding: 8px 6px !important; }
+      .m-sub a.btn { font-size: 13px !important; }
+      .m-story { grid-template-columns: minmax(0, 1fr) !important; gap: 36px !important; padding-bottom: 48px !important; }
+      .pg-head h1 { white-space: nowrap; max-width: none !important; }
+      .m-wh2 { font-size: 18px !important; line-height: 24px !important; }
+      .m-wrow { font-size: 14px !important; line-height: 28px !important; }
+      .m-wrow span:last-child { font-size: 15px !important; }
+      .m-wrow span:nth-child(2) { font-size: 12px !important; }
+      .m-first { color: var(--color-accent-700) !important; border-color: transparent !important; box-shadow: none !important; background: transparent !important; padding-left: 0 !important; }
+      .m-1col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px 12px !important; }
+      .m-2col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 12px !important; }
+      .m-photo, .m-photo image-slot { width: 100% !important; height: auto !important; aspect-ratio: 4 / 5; }
+      .m-photo { max-width: 132px; }
+      .dept-tabs { gap: 8px 18px !important; }
+      .table th, .table td { padding: 10px 8px; font-size: 14px; }
+    }
+  </style>
+</helmet>
+
+<nav class="nav" style="position: sticky; top: 0; z-index: 50; background: var(--color-bg); padding-inline: max(clamp(20px,5vw,72px), calc((100% - 1200px) / 2 + clamp(20px,5vw,72px))); padding-block: 20px;">
+  <a href="#home" onClick="{{ goHome }}" class="nav-brand" style="margin-right: auto; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none; color: var(--color-accent-700);"><path d="M50 4v20M40 14h20"></path><path d="M50 26 L18 52 V96 M50 26 L82 52 V96"></path><path d="M32 96V60M41 96V50M50 96V40M59 96V50M68 96V60"></path><circle cx="86" cy="36" r="3.5" fill="currentColor" stroke="none"></circle></svg>
+    <span style="font-size: 26px; line-height: 1;">일심교회</span>
+  </a>
+  <div class="nav-links" style="display: flex; align-items: center; gap: var(--space-4);">
+    <a href="#about" onClick="{{ goAbout }}" aria-current="{{ curAbout }}">교회소개</a>
+    <a href="#worship" onClick="{{ goWorship }}" aria-current="{{ curWorship }}">예배 안내</a>
+    <a href="#sermon" onClick="{{ goSermon }}" aria-current="{{ curSermon }}">예배와 말씀</a>
+    <a href="#depts" onClick="{{ goDepts }}" aria-current="{{ curDepts }}">부서소개</a>
+    <a href="#story" onClick="{{ goStory }}" aria-current="{{ curStory }}">일심 이야기</a>
+  </div>
+</nav>
+
+<!-- ─── 메인 ─── -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section class="hero-sec" data-screen-label="메인" style="max-width: 1200px; margin: 0 auto; padding: 8px clamp(20px, 5vw, 72px) 28px;">
+    <div class="hero-art" style="position: relative; overflow: hidden; border-radius: var(--radius-md); background: #f1ebe4; aspect-ratio: 1672 / 940; display: flex; align-items: center;">
+      <img class="hero-img" src="assets/hero-art.webp" alt="햇살이 비치는 일심교회 본당과 꽃나무" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; display: block;">
+      <span class="hero-wash" aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(243, 242, 242, 0.85) 0%, rgba(243, 242, 242, 0.42) 34%, rgba(243, 242, 242, 0) 58%);"></span>
+      <div class="hero-text" style="position: relative; width: min(60%, 640px); padding: clamp(24px, 4.4vw, 60px);">
+        <h1 style="font-size: clamp(32px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0;">
+          <span style="display:block;">내 집은 만민이</span>
+          <span class="hero-l2" style="display:block;">기도하는 집이라</span>
+        </h1>
+        <p class="hero-ref" style="font-size: 16.5px; margin: 14px 0 0; color: var(--color-neutral-700); letter-spacing: 0.04em;">이사야 56장 7절</p>
+        <p class="hero-intro" style="font-size: 17px; max-width: 26em; margin: 24px 0 0;">일심교회는 대치동 은마아파트 후문에 있는 예장통합 교회입니다. 교우 간의 따뜻한 사랑과 이웃을 향한 섬김, 다음 세대를 향한 열정으로 함께 예배하는 교회에 여러분을 초대합니다.</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 28px;">
+          <a href="#worship" onClick="{{ goWorship }}" class="btn btn-primary" style="text-decoration:none;">예배 안내</a>
+          <a href="#about" onClick="{{ goAbout }}" class="btn btn-ghost m-first" style="text-decoration:none; color: var(--color-accent-700);">처음 오시는 분</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 72px);">
+    <section style="padding: 0 0 70px;">
+      <hr style="height: 5px; border: 0; margin: 0; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 28px clamp(28px, 5vw, 96px); padding: 28px 0;">
+        <div>
+          <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">예배 영상</span>
+          <div class="m-1col" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px;">
+            <sc-for list="{{ videoTiles }}" as="v" hint-placeholder-count="4">
+              <div>
+                <a class="yt-tile {{ v.poster }}" href="{{ v.href }}" target="_blank" rel="noopener" aria-label="{{ v.label }} 영상 YouTube에서 보기" style="position: relative; aspect-ratio: 16 / 9; background-color: var(--color-neutral-900); background-size: cover; background-position: center; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-bg); text-decoration: none;">
+                  <sc-if value="{{ v.thumb }}" hint-placeholder-val="{{ false }}">
+                    <img src="{{ v.thumb }}" alt="" loading="lazy" onError="{{ v.thumbFail }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+                  </sc-if>
+                  <span class="yt-play" aria-hidden="true" style="position: relative; flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--color-neutral-900) 74%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-bg) 72%, transparent);">
+                    <svg width="18" height="18" viewBox="0 0 18 18" style="display: block; margin-left: 3px;"><path d="M4 2v14l12-7z" fill="currentColor"></path></svg>
+                  </span>
+                  <sc-if value="{{ v.plain }}" hint-placeholder-val="{{ false }}">
+                    <span style="position: relative; font-size: 15px; line-height: 22px; letter-spacing: 0.04em;">YouTube에서 보기 ↗</span>
+                  </sc-if>
+                </a>
+                <p class="m-vlabel" style="margin: 8px 0 0; font-size: 17px; line-height: 24px; font-family: var(--font-heading); font-weight: 600;"><a href="{{ v.href }}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">{{ v.label }}</a></p>
+                <p style="margin: 2px 0 0; font-size: 15px; line-height: 22px; color: var(--color-neutral-700);">{{ v.sub }}</p>
+              </div>
+            </sc-for>
+          </div>
+          <a class="m-more" href="#worship" onClick="{{ goWorship }}" style="display:inline-block; margin-top: 20px; font-size: 16.5px;">지난 설교 보기 →</a>
+        </div>
+        <div>
+          <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">예배 안내</span>
+          <h2 class="m-wh2" style="font-size: 24px; line-height: 28px; margin: 0 0 14px;">주일 예배</h2>
+          <sc-for list="{{ sundayRows }}" as="r" hint-placeholder-count="3">
+            <p class="m-wrow" style="display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 16.5px; line-height: 32px;">
+              <span>{{ r.name }}</span>
+              <span style="color: var(--color-neutral-600); font-size: 15px;">{{ r.note }}</span>
+              <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.4em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
+              <span style="font-family: var(--font-heading); font-weight: 600; font-size: 17px; white-space: nowrap;">{{ r.time }}</span>
+            </p>
+          </sc-for>
+          <h2 class="m-wh2" style="font-size: 24px; line-height: 28px; margin: 28px 0 14px;">주중 예배 · 기도회</h2>
+          <sc-for list="{{ weekRows }}" as="r" hint-placeholder-count="3">
+            <p class="m-wrow" style="display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 16.5px; line-height: 32px;">
+              <span>{{ r.name }}</span>
+              <span style="color: var(--color-neutral-600); font-size: 15px;">{{ r.note }}</span>
+              <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.4em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
+              <span style="font-family: var(--font-heading); font-weight: 600; font-size: 17px; white-space: nowrap;">{{ r.time }}</span>
+            </p>
+          </sc-for>
+          <p style="margin: 20px 0 0; font-size: 15px; color: var(--color-neutral-700);">교회학교 예배 시간은 <a href="#worship" onClick="{{ goWorship }}">예배 안내</a>에서 볼 수 있습니다.</p>
+        </div>
+      </div>
+      <hr style="height: 0; border: 0; border-top: 1px solid var(--color-text); margin: 0;">
+    </section>
+
+    <section style="padding: 0 0 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 42px clamp(28px, 4vw, 64px);">
+      <div>
+        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">교회 일정</span>
+        <sc-for list="{{ schedule }}" as="s" hint-placeholder-count="6">
+          <div class="m-sched" style="display: flex; gap: 14px; align-items: baseline; padding: 0 0 14px;">
+            <span style="flex: none; width: 5.2em; font-family: var(--font-heading); font-weight: 600; font-size: 16.5px; line-height: 26px; color: var(--color-accent-700); font-feature-settings: 'tnum' 1;">{{ s.date }}</span>
+            <div style="min-width: 0;">
+              <p style="margin: 0; font-size: 17px; line-height: 26px; font-family: var(--font-heading); font-weight: 600;">{{ s.title }}</p>
+              <p style="margin: 0; font-size: 16px; line-height: 22px; color: var(--color-neutral-700);">{{ s.when }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div>
+        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">교회 소식</span>
+        <sc-for list="{{ newsHome }}" as="n" hint-placeholder-count="4">
+          <div class="m-news" style="padding: 0 0 16px;">
+            <h3 style="font-size: 19px; line-height: 28px; margin: 0;">{{ n.title }}</h3>
+            <p style="margin: 2px 0 0; font-size: 16.5px; color: var(--color-neutral-700);">{{ n.when }}</p>
+          </div>
+        </sc-for>
+        <a class="m-more" href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">소식 전체 보기 →</a>
+      </div>
+      <div>
+        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">주보</span>
+        <sc-for list="{{ bulletins }}" as="b" hint-placeholder-count="3">
+          <p style="display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 16.5px; line-height: 28px;">
+            <span>{{ b.label }}</span>
+            <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.34em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
+            <a href="{{ b.href }}" style="white-space: nowrap;">PDF</a>
+          </p>
+        </sc-for>
+        <p style="margin: 20px 0 0; font-size: 16.5px; color: var(--color-neutral-700); max-width: 40ch;">매주 주일 오전에 새 주보가 올라옵니다. 지난 주보는 <a href="#story" onClick="{{ goStory }}">일심 이야기</a>에서 볼 수 있습니다.</p>
+      </div>
+    </section>
+
+    <section style="padding: 0 0 84px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
+        <h2 style="font-size: 28px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">교회 앨범</h2>
+        <a href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">앨범 전체 보기 →</a>
+      </div>
+      <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+        <sc-for list="{{ albumHome }}" as="a" hint-placeholder-count="4">
+          <figure style="margin: 0;">
+            <div style="aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden;">
+              <image-slot id="{{ a.id }}" shape="rect" src="{{ a.src }}" placeholder="{{ a.placeholder }}" role="img" aria-label="{{ a.title }}"></image-slot>
+            </div>
+            <figcaption class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.date }}</span></figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: 0 0 84px;">
+      <blockquote style="font-style: italic; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.4; letter-spacing: -0.01em; max-width: 34ch; margin: 0;">“내가 곧 그들을 나의 성산으로 인도하여 기도하는 내 집에서 그들을 기쁘게 할 것이며 그들의 번제와 희생을 나의 제단에서 기꺼이 받게 되리니 이는 내 집은 만민이 기도하는 집이라 일컬음이 될 것임이라”</blockquote>
+      <p style="margin: 28px 0 0; font-size: 16.5px; color: var(--color-neutral-700);">— 이사야 56:7</p>
+    </section>
+  </div>
+</sc-if>
+
+<div class="m-sub" style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 72px);">
+
+  <!-- ─── 교회소개 ─── -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+    <section class="pg-head" data-screen-label="교회소개" style="padding: 84px 0 56px;">
+      <h1 style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; max-width: 22ch;">한마음으로 기도하는 교회</h1>
+      <p style="font-size: 17px; max-width: 58ch; margin: 28px 0 0;">일심교회는 대한예수교장로회(통합) 강남노회에 속한 교회로, 서울 강남구 대치동 은마아파트 후문에 있습니다. 김은종 위임목사가 시무하고 있습니다.</p>
+    </section>
+
+    <section style="padding: 0 0 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 42px clamp(28px, 5vw, 96px); align-items: start;">
+      <div>
+        <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">위임목사 인사말</span>
+        <h2 style="font-size: 28px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">일심교회를 방문해 주셔서 감사합니다</h2>
+        <p style="font-size: 16.5px; margin: 20px 0 0; max-width: 48ch; color: var(--color-neutral-800);">저희 교회는 교우들 간에 따뜻한 사랑과 이웃을 향한 섬김을 실천하고, 다음 세대를 향한 열정을 가지고 힘차게 전진하는 건강하고 행복한 교회입니다.</p>
+        <p style="font-size: 16.5px; margin: 14px 0 0; max-width: 48ch; color: var(--color-neutral-800);">어떻게 하면 본질에 충실한 교회, 성숙한 교회, 균형 잡힌 교회, 좋은 교회가 될까를 늘 고민하며 하나님께서 기뻐하시는 공동체를 이루기 위해 노력하고 있습니다. 말씀의 기초 위에 교회가 세워질 때 성숙하고 좋은 교회가 될 수 있다고 믿습니다.</p>
+        <p style="font-size: 16.5px; margin: 28px 0 0;">일심교회 위임목사 <strong style="font-family: var(--font-heading);">김은종</strong></p>
+        <p style="font-size: 16px; margin: 4px 0 0;"><a href="mailto:joshua1382@hanmail.net">joshua1382@hanmail.net</a></p>
+      </div>
+      <figure style="margin: 0; justify-self: start; padding-top: 27px;">
+        <div style="width: 260px; height: 325px; max-width: 100%; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
+          <image-slot id="pastor" shape="rect" fit="cover" src="assets/pastor.webp" placeholder="교회소개_위임목사.jpg" role="img" aria-label="김은종 위임목사" style="width: 260px; height: 325px; display: block;"></image-slot>
+        </div>
+      </figure>
+    </section>
+
+    <section style="padding: 0 0 84px;">
+      <h2 style="font-size: 28px; line-height: 1.3; margin: 0 0 42px; letter-spacing: -0.015em;">일심교회를 섬기는 분들</h2>
+      <sc-for list="{{ staffGroups }}" as="g" hint-placeholder-count="6">
+        <div style="padding: 28px 0 42px; border-top: 1px solid var(--color-divider);">
+          <h3 style="font-size: 16.5px; line-height: 24px; margin: 0 0 24px; letter-spacing: 0.06em; color: var(--color-accent-700);">{{ g.title }}</h3>
+          <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 42px clamp(20px, 3vw, 40px);">
+            <sc-for list="{{ g.members }}" as="m" hint-placeholder-count="2">
+              <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start;">
+                <div class="m-photo" style="width: 168px; height: 210px; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
+                  <image-slot id="{{ m.id }}" shape="rect" fit="cover" src="{{ m.src }}" placeholder="{{ m.file }}" role="img" aria-label="{{ m.name }} {{ m.role }}" style="width: 168px; height: 210px; display: block;"></image-slot>
+                </div>
+                <div style="min-width: 0;">
+                  <p style="margin: 0; font-size: 21px; line-height: 28px; font-family: var(--font-heading); font-weight: 600;">{{ m.name }}</p>
+                  <p style="margin: 0; font-size: 16.5px; line-height: 24px; color: var(--color-neutral-700);">{{ m.role }}</p>
+                  <sc-for list="{{ m.duties }}" as="t" hint-placeholder-count="0">
+                    <p style="margin: 6px 0 0; font-size: 16.5px; line-height: 24px; color: var(--color-neutral-800);">{{ t }}</p>
+                  </sc-for>
+                  <sc-if value="{{ m.email }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin: 6px 0 0; font-size: 16px; line-height: 22px;"><a href="mailto:{{ m.email }}">{{ m.email }}</a></p>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section id="map" style="padding: 0 0 84px;">
+      <hr style="height: 5px; border: 0; margin: 0; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px clamp(28px, 5vw, 96px); padding: 28px 0;">
+        <div>
+          <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">오시는 길</span>
+          <p style="margin: 0; font-size: 19px; line-height: 30px;">서울특별시 강남구 삼성로58길 35<br>(대치동 991-5) 일심교회</p>
+          <p style="margin: 14px 0 0; font-size: 16.5px; color: var(--color-neutral-800);">대치동 은마아파트 후문 쪽에 있습니다.</p>
+          <p style="margin: 20px 0 0; font-size: 16.5px; line-height: 28px; color: var(--color-neutral-800);">전화 02-539-1009, 02-539-1374<br>팩스 02-539-1373<br>이메일 <a href="mailto:ispch@hanmail.net">ispch@hanmail.net</a></p>
+        </div>
+        <div style="aspect-ratio: 16 / 10; background: var(--color-surface); border-radius: var(--radius-md); overflow: hidden;">
+          <iframe src="https://maps.google.com/maps?q=%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%82%BC%EC%84%B1%EB%A1%9C58%EA%B8%B8%2035&amp;z=16&amp;output=embed" title="일심교회 위치 지도" style="width:100%; height:100%; border:0; display:block; filter: grayscale(1) contrast(1.05);" loading="lazy"></iframe>
+        </div>
+      </div>
+      <hr style="height: 0; border: 0; border-top: 1px solid var(--color-text); margin: 0;">
+    </section>
+  </sc-if>
+
+  <!-- ─── 예배 ─── -->
+  <sc-if value="{{ isWorship }}" hint-placeholder-val="{{ false }}">
+    <section class="pg-head" data-screen-label="예배" style="padding: 84px 0 56px;">
+      <h1 style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; max-width: 22ch;">예배 안내</h1>
+      <p style="font-size: 17px; margin: 28px 0 0;">모든 예배는 본당에서 드립니다. 처음 오시는 분은 안내위원에게 말씀해 주세요.</p>
+    </section>
+
+    <section style="padding: 0 0 56px;">
+      <h2 style="font-size: 24px; line-height: 28px; margin: 0 0 14px;">예배</h2>
+      <sc-raw-table class="table" style="width: 100%; font-size: 16.5px; border-collapse: collapse;">
+        <sc-raw-thead><sc-raw-tr><sc-raw-th style="text-align:left;">예배</sc-raw-th><sc-raw-th style="text-align:left;">시간</sc-raw-th><sc-raw-th style="text-align:left;">장소</sc-raw-th></sc-raw-tr></sc-raw-thead>
+        <sc-raw-tbody>
+          <sc-for list="{{ worshipRows }}" as="w" hint-placeholder-count="6">
+            <sc-raw-tr><sc-raw-td style="font-family: var(--font-heading); font-weight: 600;">{{ w.name }}</sc-raw-td><sc-raw-td>{{ w.time }}<span style="display:block; font-size: 15px; color: var(--color-neutral-700);">{{ w.note }}</span></sc-raw-td><sc-raw-td>{{ w.place }}</sc-raw-td></sc-raw-tr>
+          </sc-for>
+        </sc-raw-tbody>
+      </sc-raw-table>
+    </section>
+
+    <section style="padding: 0 0 56px;">
+      <h2 style="font-size: 24px; line-height: 28px; margin: 0 0 14px;">교회학교</h2>
+      <sc-raw-table class="table" style="width: 100%; font-size: 16.5px; border-collapse: collapse;">
+        <sc-raw-thead><sc-raw-tr><sc-raw-th style="text-align:left;">부서</sc-raw-th><sc-raw-th style="text-align:left;">시간</sc-raw-th><sc-raw-th style="text-align:left;">장소</sc-raw-th></sc-raw-tr></sc-raw-thead>
+        <sc-raw-tbody>
+          <sc-for list="{{ schoolRows }}" as="s" hint-placeholder-count="4">
+            <sc-raw-tr><sc-raw-td style="font-family: var(--font-heading); font-weight: 600;">{{ s.name }}</sc-raw-td><sc-raw-td>{{ s.time }}</sc-raw-td><sc-raw-td>{{ s.place }}</sc-raw-td></sc-raw-tr>
+          </sc-for>
+        </sc-raw-tbody>
+      </sc-raw-table>
+    </section>
+
+    <section style="padding: 0 0 70px;">
+      <h2 style="font-size: 24px; line-height: 28px; margin: 0 0 14px;">교육 모임</h2>
+      <sc-raw-table class="table" style="width: 100%; font-size: 16.5px; border-collapse: collapse;">
+        <sc-raw-thead><sc-raw-tr><sc-raw-th style="text-align:left;">모임</sc-raw-th><sc-raw-th style="text-align:left;">시간</sc-raw-th><sc-raw-th style="text-align:left;">장소</sc-raw-th></sc-raw-tr></sc-raw-thead>
+        <sc-raw-tbody>
+          <sc-raw-tr><sc-raw-td style="font-family: var(--font-heading); font-weight: 600;">구역장 성경공부</sc-raw-td><sc-raw-td>금요일 오전 10시</sc-raw-td><sc-raw-td>3층 아동부실</sc-raw-td></sc-raw-tr>
+        </sc-raw-tbody>
+      </sc-raw-table>
+    </section>
+
+  </sc-if>
+
+  <!-- ─── 예배와 말씀 ─── -->
+  <sc-if value="{{ isSermon }}" hint-placeholder-val="{{ false }}">
+    <section class="pg-head" data-screen-label="예배와 말씀" style="padding: 84px 0 56px;">
+      <h1 style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0;">예배와 말씀</h1>
+      <p class="m-wrap" style="font-size: 17px; margin: 28px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">주일 예배와 주중 예배·기도회 영상을 다시 볼 수 있습니다. 매주 예배 후 새 영상이 올라옵니다.</p>
+    </section>
+
+    <section style="padding: 0 0 84px;">
+      <hr style="height: 5px; border: 0; margin: 0 0 28px; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
+        <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700);">주일 설교</span>
+        <a href="{{ channelHref }}" target="_blank" rel="noopener" class="btn btn-ghost" style="text-decoration: none;">지난 설교 전체 보기</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 42px clamp(28px, 4vw, 64px); align-items: start;">
+        <div>
+          <p style="margin: 0 0 4px; font-size: 17px; font-family: var(--font-heading); font-weight: 600;">주일예배 <span style="font-weight: 400; font-size: 16.5px; color: var(--color-neutral-700);">1부 오전 8시 · 2부 오전 11시</span></p>
+          <h2 style="font-size: 26px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">{{ sermonTitle }}</h2>
+          <p style="margin: 6px 0 14px; font-size: 16.5px; color: var(--color-neutral-700);">{{ sermonMeta }}</p>
+          <a class="yt-tile yt-poster-sunday" href="{{ videoHref }}" target="_blank" rel="noopener" aria-label="주일예배 영상 YouTube에서 보기" style="position: relative; aspect-ratio: 16 / 9; background-color: var(--color-neutral-900); background-size: cover; background-position: center; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-bg); text-decoration: none;">
+            <sc-if value="{{ videoThumb }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ videoThumb }}" alt="" loading="lazy" onError="{{ hideImg }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+            </sc-if>
+            <span class="yt-play" aria-hidden="true" style="position: relative; flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--color-neutral-900) 74%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-bg) 72%, transparent);">
+              <svg width="18" height="18" viewBox="0 0 18 18" style="display: block; margin-left: 3px;"><path d="M4 2v14l12-7z" fill="currentColor"></path></svg>
+            </span>
+          </a>
+        </div>
+        <div>
+          <p style="margin: 0 0 4px; font-size: 17px; font-family: var(--font-heading); font-weight: 600;">열린예배 <span style="font-weight: 400; font-size: 16.5px; color: var(--color-neutral-700);">주일 오후 1시 30분 · 청년부 주관</span></p>
+          <h2 style="font-size: 26px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">{{ openTitle }}</h2>
+          <p style="margin: 6px 0 14px; font-size: 16.5px; color: var(--color-neutral-700);">{{ openMeta }}</p>
+          <a class="yt-tile" href="{{ videoHrefOpen }}" target="_blank" rel="noopener" aria-label="열린예배 영상 YouTube에서 보기" style="position: relative; aspect-ratio: 16 / 9; background-color: var(--color-neutral-900); background-size: cover; background-position: center; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-bg); text-decoration: none;">
+            <sc-if value="{{ videoThumbOpen }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ videoThumbOpen }}" alt="" loading="lazy" onError="{{ hideImg }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+            </sc-if>
+            <span class="yt-play" aria-hidden="true" style="position: relative; flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--color-neutral-900) 74%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-bg) 72%, transparent);">
+              <svg width="18" height="18" viewBox="0 0 18 18" style="display: block; margin-left: 3px;"><path d="M4 2v14l12-7z" fill="currentColor"></path></svg>
+            </span>
+            <sc-if value="{{ openPlain }}" hint-placeholder-val="{{ false }}">
+              <span style="position: relative; font-size: 15px; line-height: 22px; letter-spacing: 0.04em;">YouTube에서 보기 ↗</span>
+            </sc-if>
+          </a>
+        </div>
+      </div>
+      <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin: 56px 0 14px;">주중 예배 · 기도회</span>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 28px clamp(28px, 4vw, 64px);">
+        <sc-for list="{{ weekVideoTiles }}" as="v" hint-placeholder-count="3">
+          <div>
+            <a class="yt-tile {{ v.poster }}" href="{{ v.href }}" target="_blank" rel="noopener" aria-label="{{ v.label }} 영상 YouTube에서 보기" style="position: relative; aspect-ratio: 16 / 9; background-color: var(--color-neutral-900); background-size: cover; background-position: center; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-bg); text-decoration: none;">
+              <sc-if value="{{ v.thumb }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ v.thumb }}" alt="" loading="lazy" onError="{{ v.thumbFail }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+              </sc-if>
+              <span class="yt-play" aria-hidden="true" style="position: relative; flex: none; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--color-neutral-900) 74%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-bg) 72%, transparent);">
+                <svg width="18" height="18" viewBox="0 0 18 18" style="display: block; margin-left: 3px;"><path d="M4 2v14l12-7z" fill="currentColor"></path></svg>
+              </span>
+              <sc-if value="{{ v.plain }}" hint-placeholder-val="{{ false }}">
+                <span style="position: relative; font-size: 15px; line-height: 22px; letter-spacing: 0.04em;">YouTube에서 보기 ↗</span>
+              </sc-if>
+            </a>
+            <p style="margin: 14px 0 0; font-size: 17px; font-family: var(--font-heading); font-weight: 600;">{{ v.label }} <span style="font-weight: 400; font-size: 16.5px; color: var(--color-neutral-700);">{{ v.sub }}</span></p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ─── 부서소개 ─── -->
+  <sc-if value="{{ isDepts }}" hint-placeholder-val="{{ false }}">
+    <section class="pg-head" data-screen-label="부서소개" style="padding: 84px 0 56px;">
+      <h1 class="m-wrap" style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; white-space: nowrap;">다음 세대와 함께 자라는 교회</h1>
+      <p style="font-size: 17px; margin: 28px 0 0;">유치부부터 청년부까지, 각 부서가 세대에 맞는 예배와 교육으로 믿음을 이어갑니다.</p>
+      <div class="dept-tabs" style="display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 42px; padding: 14px 0; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
+        <sc-for list="{{ deptTabs }}" as="t" hint-placeholder-count="3">
+          <a href="{{ t.href }}" onClick="{{ t.go }}" aria-current="{{ t.current }}" style="font-size: 17px; line-height: 28px; font-family: var(--font-heading); font-weight: 600; color: {{ t.color }}; border-bottom: 2px solid {{ t.underline }}; padding-bottom: 2px;" style-hover="color: var(--color-accent-700);">{{ t.label }}</a>
+        </sc-for>
+        <div style="margin-left: auto; display: flex; gap: 6px;">
+          <button type="button" class="btn btn-ghost btn-icon" onClick="{{ deptPrev }}" aria-label="이전 부서" style="font-size: 20px;">‹</button>
+          <button type="button" class="btn btn-ghost btn-icon" onClick="{{ deptNext }}" aria-label="다음 부서" style="font-size: 20px;">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 0 0 84px; overflow: hidden;">
+      <div style="display: flex; align-items: flex-start; transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); transform: translateX({{ deptOffset }});">
+      <sc-for list="{{ depts }}" as="d" hint-placeholder-count="5">
+        <div id="{{ d.id }}" aria-hidden="{{ d.hidden }}" style="flex: 0 0 100%; min-width: 0; padding: 0 0 28px; transition: opacity 0.4s; opacity: {{ d.opacity }};">
+          <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-accent-700); margin-bottom: 10px;">{{ d.group }}</span>
+          <h2 style="font-size: clamp(28px, 3vw, 36px); line-height: 1.2; margin: 0; letter-spacing: -0.015em;">{{ d.name }}</h2>
+          <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 14px; margin-top: 28px;">
+            <sc-for list="{{ d.photos }}" as="ph" hint-placeholder-count="4">
+              <div style="aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden;">
+                <image-slot id="{{ ph.id }}" shape="rect" fit="cover" src="{{ ph.src }}" placeholder="{{ ph.file }}" role="img" aria-label="{{ d.name }} 사진"></image-slot>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin: 28px 0 0; font-size: 17px; line-height: 28px; font-family: var(--font-heading); font-weight: 600;">{{ d.meta }}</p>
+          <sc-for list="{{ d.lines }}" as="l" hint-placeholder-count="3">
+            <p style="margin: 6px 0 0; font-size: 16.5px; line-height: 26px; color: var(--color-neutral-800); max-width: 64ch;">{{ l }}</p>
+          </sc-for>
+        </div>
+      </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ─── 일심 이야기 ─── -->
+  <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
+    <section class="pg-head" data-screen-label="일심 이야기" style="padding: 84px 0 56px;">
+      <h1 style="font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0; max-width: 22ch;">교회 소식과 함께한 순간들</h1>
+    </section>
+
+    <section class="m-story" style="padding: 0 0 84px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr) minmax(0, 0.75fr); gap: 42px clamp(28px, 4vw, 64px); align-items: start;">
+      <div>
+        <h2 style="font-size: 28px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">교회 소식</h2>
+        <p style="margin: 6px 0 28px; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ newsDate }} 주보</p>
+        <div style="position: relative; overflow: hidden; max-height: {{ newsMaxH }}; transition: max-height 0.4s ease;">
+        <sc-for list="{{ newsGroups }}" as="g" hint-placeholder-count="3">
+          <div style="padding: 0 0 28px;">
+            <h3 style="font-size: 20px; line-height: 28px; margin: 0 0 14px; color: var(--color-accent-700);">{{ g.title }}</h3>
+            <sc-for list="{{ g.items }}" as="n" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px; padding: 0 0 14px;">
+                <span style="flex: none; width: 1.6em; font-family: var(--font-heading); font-weight: 600; font-size: 16.5px; line-height: 28px;">{{ n.no }}</span>
+                <div style="min-width: 0;">
+                  <p style="margin: 0; font-size: 17px; line-height: 28px; font-family: var(--font-heading); font-weight: 600;">{{ n.title }}<span style="font-weight: 400; color: var(--color-neutral-800);"> {{ n.when }}</span></p>
+                  <sc-for list="{{ n.notes }}" as="t" hint-placeholder-count="0">
+                    <p style="margin: 2px 0 0; font-size: 16.5px; line-height: 24px; color: var(--color-neutral-800); max-width: 56ch;">{{ t }}</p>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 72px; pointer-events: none; background: linear-gradient(to bottom, transparent, var(--color-bg)); opacity: {{ newsFadeOpacity }}; transition: opacity 0.3s;"></div>
+        </div>
+        <button type="button" class="btn btn-secondary" onClick="{{ toggleNews }}" style="margin-top: 14px;">{{ newsToggleLabel }}</button>
+      </div>
+      <div>
+        <h2 style="font-size: 28px; line-height: 1.3; margin: 0 0 20px; letter-spacing: -0.015em;">교회 일정</h2>
+        <sc-for list="{{ schedule }}" as="s" hint-placeholder-count="6">
+          <div style="display: flex; gap: 14px; align-items: baseline; padding: 0 0 14px;">
+            <span style="flex: none; width: 5.2em; font-family: var(--font-heading); font-weight: 600; font-size: 16.5px; line-height: 26px; color: var(--color-accent-700); font-feature-settings: 'tnum' 1;">{{ s.date }}</span>
+            <div style="min-width: 0;">
+              <p style="margin: 0; font-size: 17px; line-height: 26px; font-family: var(--font-heading); font-weight: 600;">{{ s.title }}</p>
+              <p style="margin: 0; font-size: 16px; line-height: 22px; color: var(--color-neutral-700);">{{ s.when }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div>
+        <h2 style="font-size: 28px; line-height: 1.3; margin: 0 0 20px; letter-spacing: -0.015em;">주보</h2>
+        <sc-for list="{{ bulletins }}" as="b" hint-placeholder-count="3">
+          <p style="display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 16.5px; line-height: 28px;">
+            <span>{{ b.label }}</span>
+            <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.34em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
+            <a href="{{ b.href }}" style="white-space: nowrap;">PDF</a>
+          </p>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: 0 0 84px;">
+      <h2 style="font-size: 28px; line-height: 1.3; margin: 0 0 20px; letter-spacing: -0.015em;">교회 앨범</h2>
+      <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px 20px;">
+        <sc-for list="{{ album }}" as="a" hint-placeholder-count="6">
+          <figure style="margin: 0;">
+            <div style="aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden;">
+              <image-slot id="{{ a.id }}" shape="rect" src="{{ a.src }}" placeholder="{{ a.placeholder }}" role="img" aria-label="{{ a.title }}"></image-slot>
+            </div>
+            <figcaption style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.date }}</span></figcaption>
+          </figure>
+        </sc-for>
+      </div>
+      <p style="margin: 20px 0 0; font-size: 15px; color: var(--color-neutral-700);">사진을 각 칸에 끌어다 놓으면 바뀝니다.</p>
+    </section>
+  </sc-if>
+
+  <footer style="padding: 28px 0 56px; font-size: 13px; line-height: 22px; color: var(--color-neutral-700); display: flex; flex-wrap: wrap; gap: 8px 28px; justify-content: space-between;">
+    <span>대한예수교장로회 일심교회 · 위임목사 김은종 · 서울특별시 강남구 삼성로58길 35 (대치동 991-5)</span>
+    <span>TEL 02-539-1009, 539-1374 · FAX 02-539-1373 · ispch@hanmail.net</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"season":{"editor":"enum","options":["auto","winter","summer"],"default":"auto","tsType":"string","section":"예배 시간"},"youtubeId":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"youtubeIdOpen":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"youtubeIdWed":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 수요예배"},"youtubeIdDawn":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 새벽예배"},"youtubeIdFri":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 금요기도회"},"videoMode":{"editor":"enum","options":["auto","live"],"default":"auto","tsType":"string","section":"기타"},"channelUrl":{"editor":"text","default":"","tsType":"string","section":"기타"},"$preview":{"width":1280,"height":2700}}'>
+class Component extends DCLogic {
+  state = { page: 'home', dept: 0, newsOpen: false, vids: null };
+  // One YouTube playlist per service. The channel keeps each newest-first.
+  playlists = {
+    sunday: 'PL22_WjwmV4sYWhPrUAcTdLMT98NFzQMUm',
+    wed: 'PL22_WjwmV4sbWm44zfqHHxXmPvtS6KAPB',
+    dawn: 'PL22_WjwmV4saArwj1jiWJhdV8mHiWMKIQ',
+    fri: 'PL22_WjwmV4sYBN8MIT0vln2t7g62a4FLt',
+    open: 'PL22_WjwmV4sa2rK_zbOB3EZQTohGOTyHo',
+  };
+  // Services whose tile has a stand-in thumbnail (.yt-poster-* in the styles): the channel's
+  // standing title card for that service. 열린예배 has none — its cards change every week.
+  posters = { sunday: true, wed: true, fri: true, dawn: true };
+  // ── Latest worship videos: resolved in the visitor's browser on every visit ──
+  // No server and no API key. YouTube's IFrame Player API lists a playlist's video ids
+  // (newest first, as the channel keeps them) and the public oEmbed endpoint gives each
+  // title. Sunday takes the newest 2부 service; a video that can't be shown is skipped.
+  // Results are kept for 20 minutes so repeat visits don't ask YouTube again.
+  ytTitle(id) {
+    return fetch('https://www.youtube.com/oembed?format=json&url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + id))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((o) => (o && o.title) || null)
+      .catch(() => null);
+  }
+  ytApi() {
+    const C = this.constructor;
+    if (!C._ytApi) {
+      C._ytApi = new Promise((res, rej) => {
+        if (window.YT && window.YT.Player) { res(window.YT); return; }
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(window.YT); };
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        s.onerror = () => rej(new Error('YouTube API blocked'));
+        document.head.appendChild(s);
+        setTimeout(() => rej(new Error('YouTube API timeout')), 8000);
+      });
+    }
+    return C._ytApi;
+  }
+  ytPlaylistIds(list) {
+    return this.ytApi().then((YT) => new Promise((res) => {
+      const host = document.createElement('div');
+      host.setAttribute('aria-hidden', 'true');
+      host.setAttribute('inert', '');
+      host.style.cssText = 'position:absolute;left:-9999px;top:0;width:200px;height:113px;overflow:hidden;opacity:0;pointer-events:none';
+      const el = document.createElement('div');
+      host.appendChild(el);
+      document.body.appendChild(host);
+      let done = false; let player = null; let timer = null; let left = 40;
+      const fin = (ids) => {
+        if (done) return;
+        done = true;
+        clearInterval(timer);
+        try { player.destroy(); } catch (e) {}
+        host.remove();
+        res(ids || []);
+      };
+      const poll = () => {
+        if (timer) return;
+        timer = setInterval(() => {
+          let ids = null;
+          try { ids = player.getPlaylist(); } catch (e) {}
+          if ((ids && ids.length) || --left < 0) fin(ids);
+        }, 150);
+      };
+      player = new YT.Player(el, {
+        width: 200, height: 113,
+        playerVars: { listType: 'playlist', list: list },
+        // A playlist YouTube won't embed reports an error and never lists its ids: stop waiting soon.
+        events: { onReady: poll, onError: () => { left = Math.min(left, 8); poll(); } },
+      });
+      setTimeout(() => fin([]), 10000);
+    })).catch(() => []);
+  }
+  async ytLatest(list, want) {
+    const ids = (await this.ytPlaylistIds(list)).slice(0, 10);
+    for (const id of ids) {
+      const title = await this.ytTitle(id);
+      if (!title || (want && !want(title))) continue;
+      const v = { id: id, title: title };
+      const m = title.match(/(\d{1,2})월\s*(\d{1,2})일/);
+      if (m) {
+        const now = new Date();
+        const y = now.getFullYear() - (Number(m[1]) > now.getMonth() + 2 ? 1 : 0);
+        v.date = y + '-' + String(m[1]).padStart(2, '0') + '-' + String(m[2]).padStart(2, '0');
+      }
+      return v;
+    }
+    return null;
+  }
+  async loadLatest() {
+    const KEY = 'ilsim.latestVideos.v1';
+    try {
+      const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (c && c.vids && Date.now() - c.t < 20 * 60 * 1000) { this.setState({ vids: c.vids }); return; }
+    } catch (e) {}
+    const is2 = (t) => /2\s*부/.test(t);
+    // The site's own /api/latest-videos (when a host provides it) only fills slots the browser couldn't.
+    const apiP = fetch('/api/latest-videos').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    const vids = {};
+    for (const key of ['sunday', 'open', 'wed', 'fri', 'dawn']) {
+      let v = await this.ytLatest(this.playlists[key], key === 'sunday' ? is2 : null);
+      if (!v) {
+        const a = ((await apiP) || {})[key];
+        if (a && a.id && (key !== 'sunday' || is2(a.title || ''))) v = a;
+      }
+      if (v) {
+        vids[key] = v;
+        if (this._alive) this.setState({ vids: Object.assign({}, vids) });
+      }
+    }
+    if (Object.keys(vids).length) {
+      try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), vids: vids })); } catch (e) {}
+    }
+  }
+  pickDept(i) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ dept: i }); }; }
+  componentDidMount() {
+    const read = () => {
+      const h = (location.hash || '#home').slice(1);
+      if (['home','about','worship','sermon','depts','story'].includes(h)) this.setState({ page: h });
+    };
+    read();
+    this._alive = true;
+    this.loadLatest();
+    this._onHash = read;
+    addEventListener('hashchange', read);
+  }
+  componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); }
+  go(page) {
+    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
+  }
+  jump(id) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const el = document.getElementById(id);
+      if (el) scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 28, behavior: 'smooth' });
+    };
+  }
+  renderVals() {
+    const p = this.state.page;
+    const m = new Date().getMonth() + 1;
+    const season = this.props.season ?? 'auto';
+    const winter = season === 'winter' || (season === 'auto' && (m <= 3 || m >= 11));
+    const wed = winter ? '오후 7시' : '오후 7시 30분';
+    const wedNote = winter ? '동절기(1~3월, 11~12월)' : '하절기(4~10월)';
+    const vid = this.props.youtubeId || '';
+    const d = new Date();
+    const days = ['일','월','화','수','목','금','토'];
+    // Each slot shows the newest video of its own YouTube playlist — Sunday the newest 2부
+    // service (see loadLatest). Until that resolves (or if it can't) the playlist stands in.
+    const vids = this.state.vids || {};
+    const playlists = this.playlists;
+    const embed = (key, override) => override
+      ? `https://www.youtube.com/embed/${override}`
+      : vids[key]
+        ? `https://www.youtube.com/embed/${vids[key].id}`
+        : `https://www.youtube.com/embed/videoseries?list=${playlists[key]}`;
+    // Where each video tile links: a Tweaks ID if one is set, else the resolved newest video,
+    // else the playlist with playnext=1 — YouTube itself then opens the playlist's first
+    // (newest) video, so the link stays current even when nothing could be resolved.
+    // Sunday is the 2부 service only (3부 is 열린예배's, handled on its own): its playlist also
+    // holds 1부 and 3부, so an unresolved Sunday opens the playlist itself, never its newest upload.
+    const link = (key, override) => override
+      ? `https://www.youtube.com/watch?v=${override}`
+      : vids[key]
+        ? `https://www.youtube.com/watch?v=${vids[key].id}`
+        : `https://www.youtube.com/playlist?list=${playlists[key]}` + (key === 'sunday' ? '' : '&playnext=1');
+    // Thumbnails: the newest video's own (or the Tweaks ID's) once it is known, laid over the
+    // tile's stand-in card, so a tile is never blank while YouTube is unresolved or unreachable.
+    const thumb = (key, override) => {
+      const id = override || (vids[key] && vids[key].id);
+      return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
+    };
+    const hideImg = (e) => { e.currentTarget.style.display = 'none'; };
+    const tile = (key, override, label, sub) => {
+      const t = thumb(key, override);
+      const poster = this.posters[key] ? 'yt-poster-' + key : '';
+      return { label, sub, src: embed(key, override), href: link(key, override), thumb: t, poster, plain: !t && !poster, thumbFail: hideImg };
+    };
+    const ymd = (v) => { const [y, mo, dd] = v.date.split('-').map(Number); return { y, mo, dd }; };
+    const sun = !vid && vids.sunday && vids.sunday.date ? vids.sunday : null;
+    const sunPart = sun ? (((sun.title || '').match(/([123])부/) || [])[1] || '2') : '';
+    const sunTime = { '1': '오전 8시', '2': '오전 11시', '3': '오후 1시 30분' }[sunPart];
+    const sermonTitle = this.props.sermonTitle
+      || (sun ? `${ymd(sun).mo}월 ${ymd(sun).dd}일 주일 ${sunPart}부 예배` : '주일예배');
+    const sermonMeta = this.props.sermonMeta
+      || (sun ? `${ymd(sun).y}년 ${ymd(sun).mo}월 ${ymd(sun).dd}일 ${sunTime} · 김은종 위임목사` : '1부 오전 8시 · 2부 오전 11시 · 김은종 위임목사');
+    const open = !this.props.youtubeIdOpen && vids.open && vids.open.date ? vids.open : null;
+    const openTitle = this.props.openTitle
+      || (open ? `${ymd(open).mo}월 ${ymd(open).dd}일 열린예배` : '열린예배');
+    const openMeta = this.props.openMeta
+      || (open ? `${ymd(open).y}년 ${ymd(open).mo}월 ${ymd(open).dd}일 오후 1시 30분 · 청년부` : '주일 오후 1시 30분 · 청년부');
+    const pic = (name) => 'assets/' + name + '.jpg';
+    const albumTitles = [
+      ['2026 청소년·청년부 연합 하계선교', '2026. 8'], ['2026 하계선교 준비 일일찻집', '2026. 7'], ['2026 아동부 여름성경학교', '2026. 7'], ['2026 맥추감사주일 기념 전교인 행사', '2026. 7'],
+      ['2026 장로·안수집사·권사 피택', '2026. 6'], ['2026 가정과 나라를 위한 철야기도회', '2026. 6'], ['2026 서울강남노회 남선교회 체육대회', '2026. 6'], ['2026 성경암송대회', '2026. 6'],
+    ];
+    const album = albumTitles.map(([title, date], i) => {
+      const file = '교회앨범_' + String(i + 1).padStart(2, '0');
+      return { id: 'album-' + (i + 1), title, date, src: pic(file), placeholder: file + '.jpg' };
+    });
+    return {
+      isHome: p === 'home', isAbout: p === 'about', isWorship: p === 'worship', isSermon: p === 'sermon', isDepts: p === 'depts', isStory: p === 'story',
+      curAbout: p === 'about' ? 'page' : undefined, curWorship: p === 'worship' ? 'page' : undefined, curSermon: p === 'sermon' ? 'page' : undefined,
+      goSermon: this.go('sermon'),
+      curDepts: p === 'depts' ? 'page' : undefined, curStory: p === 'story' ? 'page' : undefined,
+      goHome: this.go('home'), goAbout: this.go('about'), goWorship: this.go('worship'), goDepts: this.go('depts'), goStory: this.go('story'),
+      todayLabel: `${d.getFullYear()}년 ${m}월 ${d.getDate()}일 ${days[d.getDay()]}요일`,
+      videoSrc: !vid && (this.props.videoMode ?? 'auto') === 'live'
+        ? 'https://www.youtube.com/embed/live_stream?channel=UC5WnK8534aZbXfXVnx3OKng'
+        : embed('sunday', vid),
+      videoSrcOpen: embed('open', this.props.youtubeIdOpen),
+      videoHref: !vid && (this.props.videoMode ?? 'auto') === 'live'
+        ? 'https://www.youtube.com/channel/UC5WnK8534aZbXfXVnx3OKng/live'
+        : link('sunday', vid),
+      videoHrefOpen: link('open', this.props.youtubeIdOpen),
+      videoThumb: !vid && (this.props.videoMode ?? 'auto') === 'live' ? '' : thumb('sunday', vid),
+      videoThumbOpen: thumb('open', this.props.youtubeIdOpen),
+      openPlain: !thumb('open', this.props.youtubeIdOpen),
+      hideImg,
+      weekVideoTiles: [
+        tile('wed', this.props.youtubeIdWed, '수요예배', '수요일 ' + wed),
+        tile('dawn', this.props.youtubeIdDawn, '새벽예배', '월~토 오전 5시 30분'),
+        tile('fri', this.props.youtubeIdFri, '금요기도회', '금요일 오후 8시'),
+      ],
+      videoTiles: [
+        tile('sunday', vid, '주일예배', sermonTitle),
+        tile('wed', this.props.youtubeIdWed, '수요예배', '수요일 ' + wed),
+        tile('dawn', this.props.youtubeIdDawn, '새벽예배', '월~토 오전 5시 30분'),
+        tile('fri', this.props.youtubeIdFri, '금요기도회', '금요일 오후 8시'),
+      ],
+      channelHref: this.props.channelUrl || 'https://www.youtube.com/@%EC%9D%BC%EC%8B%AC%EA%B5%90%ED%9A%8C',
+      sermonTitle,
+      sermonMeta,
+      sundayRows: [
+        { name: '주일 낮 예배 1부', note: '', time: '오전 8시' },
+        { name: '주일 낮 예배 2부', note: '', time: '오전 11시' },
+        { name: '주일 낮 예배 3부', note: '청년부 주관', time: '오후 1시 30분' },
+      ],
+      weekRows: [
+        { name: '수요예배', note: wedNote, time: wed },
+        { name: '새벽 기도회', note: '월~토', time: '오전 5시 30분' },
+        { name: '금요 심야기도회', note: '', time: '오후 8시' },
+      ],
+      worshipRows: [
+        { name: '주일 낮 예배 1부', time: '주일 오전 8시', place: '본당', note: '' },
+        { name: '주일 낮 예배 2부', time: '주일 오전 11시', place: '본당', note: '' },
+        { name: '주일 낮 예배 3부', time: '주일 오후 1시 30분', place: '본당', note: '청년부 주관' },
+        { name: '수요예배', time: '수요일 ' + wed, place: '본당', note: '동절기(1~3월, 11~12월) 오후 7시 · 하절기(4~10월) 오후 7시 30분' },
+        { name: '새벽 기도회', time: '월~토 오전 5시 30분', place: '본당', note: '' },
+        { name: '금요 심야기도회', time: '금요일 오후 8시', place: '본당', note: '' },
+      ],
+      schoolRows: [
+        { name: '유치부', time: '주일 오전 11시', place: '3층 유치부실' },
+        { name: '아동부', time: '주일 오전 11시', place: '3층 아동부실' },
+        { name: '중고등부', time: '주일 오전 11시 30분', place: '4층 중고등부실' },
+        { name: '청년부', time: '주일 오후 1시 30분', place: '본당' },
+      ],
+      deptTabs: ['유치부', '아동부', '중고등부', '청년부'].map((label, i) => ({
+        label, href: '#depts', go: this.pickDept(i),
+        current: i === this.state.dept ? 'true' : undefined,
+        color: i === this.state.dept ? 'var(--color-accent-700)' : 'var(--color-text)',
+        underline: i === this.state.dept ? 'var(--color-accent-700)' : 'transparent',
+      })),
+      deptOffset: `-${this.state.dept * 100}%`,
+      deptPrev: () => this.setState(s => ({ dept: (s.dept + 3) % 4 })),
+      deptNext: () => this.setState(s => ({ dept: (s.dept + 1) % 4 })),
+      depts: [
+        { id: 'dept-kinder', group: '교회학교', name: '유치부', photos: [1,2,3,4].map(n => ({ id: 'kinder-' + n, file: '부서소개_유치부_' + n + '.jpg', src: pic('부서소개_유치부_' + n) })),
+          meta: '연령 : 만 3세 – 7세 | 예배 : 주일 오전 11시, 3층 유치부실 | 담당교역자 : 염스람 교육전도사',
+          lines: ['하나, 찬양과 말씀, 놀이로 하나님을 처음 만나고 예배하는 습관을 배웁니다.', '하나, 함께 예배하고 함께 놀며 함께 자라갑니다.', '하나, 부모님과 소통하며 하나님의 자녀로 양육합니다.'] },
+        { id: 'dept-elem', group: '교회학교', name: '아동부', photos: [1,2,3,4].map(n => ({ id: 'elem-' + n, file: '부서소개_아동부_' + n + '.jpg', src: pic('부서소개_아동부_' + n) })),
+          meta: '연령 : 초등학교 1 – 6학년 | 예배 : 주일 오전 11시, 3층 아동부실 | 담당교역자 : 김종환 부목사',
+          lines: ['하나, 예배와 분반 공부를 통해 성경 말씀을 배우고 신앙의 기초를 세웁니다.', '하나, 함께 예배하고 함께 놀며 믿음의 우정을 쌓습니다.', '하나, 부모님과 소통하며 하나님의 자녀로 양육합니다.'] },
+        { id: 'dept-middle', group: '교회학교', name: '중고등부', photos: [1,2,3,4].map(n => ({ id: 'middle-' + n, file: '부서소개_중고등부_' + n + '.jpg', src: pic('부서소개_중고등부_' + n) })),
+          meta: '연령 : 중학교 1학년 – 고등학교 3학년 | 예배 : 주일 오전 11시 30분, 4층 중고등부실 | 담당교역자 : 김종환 부목사',
+          lines: ['하나, 예배자로서 성경적 신앙고백과 가치관을 세우고 제자의 삶을 훈련합니다.', '하나, 소그룹에서 말씀과 삶을 나누며 진로와 신앙을 함께 고민합니다.', '하나, 부모님과 소통하며 다음 세대를 믿음 안에서 세워갑니다.'] },
+        { id: 'dept-youth', group: '청년부', name: '청년부', photos: [1,2,3,4].map(n => ({ id: 'youth-' + n, file: '부서소개_청년부_' + n + '.jpg', src: pic('부서소개_청년부_' + n) })),
+          meta: '대상 : 대학생 · 직장 청년 | 예배 : 주일 오후 1시 30분, 본당 (주일 3부 예배 주관) | 담당교역자 : 김종욱 부목사',
+          lines: ['하나, 청년기의 시작을 하나님 말씀으로 채워갑니다.', '하나, 찬양과 교제로 서로의 신앙을 세워갑니다.', '하나, 주일 3부 예배를 섬기며 예배하는 삶을 배웁니다.'] },
+      ].map((d, i) => ({ ...d, hidden: i !== this.state.dept, opacity: i === this.state.dept ? 1 : 0 })),
+      newsDate: '2026년 9월 27일',
+      newsMaxH: this.state.newsOpen ? '4000px' : '420px',
+      newsFadeOpacity: this.state.newsOpen ? 0 : 1,
+      newsToggleLabel: this.state.newsOpen ? '접기 ↑' : '더보기 ↓',
+      toggleNews: () => this.setState(s => ({ newsOpen: !s.newsOpen })),
+      openTitle,
+      openMeta,
+      newsGroups: [
+        { title: '알림', items: [
+          { no: '1.', title: '[생명의 삶]', when: '정기구독자는 10월호를 수령하시기 바랍니다.', notes: [] },
+          { no: '2.', title: '[임직·은퇴 감사예배 준비위원회 모임]', when: '10월 4일(주일) 1부 예배 후 / 아가페홀', notes: ['대상: 당회원, 여전도회 임원, 남전도회 임원, 안수집사 회장, 임직자 대표'] },
+          { no: '3.', title: '[임시 공동의회 안내]', when: '10월 4일(주일) 2부 예배 후 / 본당', notes: ['안건: 1. 안갑준 장로 원로장로 추대건  2. 정관 개정'] },
+          { no: '4.', title: '[연합구역예배 안내]', when: '10월 16일(금), 11월 20일(금) / 본당', notes: [] },
+          { no: '5.', title: '[성지 순례]', when: '10월 27일(화) 오전 9시~오후 5시 / 양화진 선교사 기념관', notes: ['대상: 전 교인 참여 희망자', '신청방법: 1층 로비에 비치된 신청서 작성 (10월 18일(주일)까지)'] },
+          { no: '6.', title: '[임직·은퇴 감사예배]', when: '11월 1일(주일) 오후 1시 30분 / 본당', notes: [] },
+          { no: '7.', title: '[대입 수험생 기도 신청서]', when: '로비에 신청서가 비치되어 있습니다.', notes: ['신청을 원하시는 분들은 신청서를 작성하여 신청함에 넣어주시기 바랍니다.'] },
+        ]},
+        { title: '모임', items: [
+          { no: '1.', title: '[가정과 자녀를 위한 집중기도회]', when: '매주 수요예배 후 / 본당', notes: [] },
+          { no: '2.', title: '[금요전도모임]', when: '매주 금요일 오후 2시 30분', notes: ['지역전도에 동참하기를 원하시는 분들은 1층 로비로 오시기 바랍니다.'] },
+        ]},
+      ],
+      schedule: [
+        { date: '10월 4일', title: '임직·은퇴 감사예배 준비위원회 모임', when: '주일 1부 예배 후 · 아가페홀' },
+        { date: '10월 4일', title: '임시 공동의회', when: '주일 2부 예배 후 · 본당' },
+        { date: '10월 16일', title: '연합구역예배', when: '금요일 · 본당' },
+        { date: '10월 27일', title: '성지 순례', when: '화요일 오전 9시~오후 5시 · 신청 10월 18일까지' },
+        { date: '11월 1일', title: '임직·은퇴 감사예배', when: '주일 오후 1시 30분 · 본당' },
+        { date: '11월 20일', title: '연합구역예배', when: '금요일 · 본당' },
+      ],
+      newsHome: [
+        { title: '생명의 삶 10월호', when: '정기구독자는 10월호를 수령하시기 바랍니다.' },
+        { title: '대입 수험생 기도 신청서', when: '로비에 비치 · 작성 후 신청함에 넣어주세요.' },
+        { title: '가정과 자녀를 위한 집중기도회', when: '매주 수요예배 후 · 본당' },
+        { title: '금요전도모임', when: '매주 금요일 오후 2시 30분 · 1층 로비' },
+      ],
+      bulletins: [
+        { label: '2026년 9월 27일 주보', href: '#' },
+        { label: '2026년 9월 20일 주보', href: '#' },
+        { label: '2026년 9월 13일 주보', href: '#' },
+      ],
+      album,
+      albumHome: album.slice(0, 4),
+      staffGroups: [
+        { title: '부교역자', members: [
+          { id: 'staff-kim-jonghwan', file: '교회소개_부목사_김종환.jpg', src: pic('교회소개_부목사_김종환'), name: '김종환', role: '부목사', email: 'lyduce_kim@naver.com', duties: ['아동부, 중고등부 담당', '교육위원회 · 봉사위원회 · 관리위원회 담당', '1~7구역 담당'] },
+          { id: 'staff-kim-jongwook', file: '교회소개_부목사_김종욱.jpg', src: pic('교회소개_부목사_김종욱'), name: '김종욱', role: '부목사', email: 'skill1124@naver.com', duties: ['청년부 담당', '예배위원회 · 선교위원회 담당', '8~11구역 담당'] },
+          { id: 'staff-yeom-seuram', file: '교회소개_교육전도사_염스람.jpg', src: pic('교회소개_교육전도사_염스람'), name: '염스람', role: '교육전도사', email: '', duties: ['유치부 담당'] },
+        ]},
+        { title: '직원', members: [
+          { id: 'staff-shin-hyewon', file: '교회소개_사무간사_신혜원.jpg', src: pic('교회소개_사무간사_신혜원'), name: '신혜원', role: '사무간사', email: '', duties: [] },
+        ]},
+        { title: '원로장로', members: [
+          { id: 'staff-choi-jeongin', file: '교회소개_원로장로_최정인.jpg', src: pic('교회소개_원로장로_최정인'), name: '최정인', role: '원로장로', email: '', duties: [] },
+        ]},
+        { title: '시무장로', members: [
+          { id: 'staff-ahn-gapjun', file: '교회소개_시무장로_안갑준.jpg', src: pic('교회소개_시무장로_안갑준'), name: '안갑준', role: '시무장로', email: '', duties: ['선교위원회 위원장'] },
+          { id: 'staff-kim-jonggi', file: '교회소개_시무장로_김종기.jpg', src: pic('교회소개_시무장로_김종기'), name: '김종기', role: '시무장로', email: 'jonggyee@hanmail.net', duties: ['봉사위원회 위원장'] },
+          { id: 'staff-kim-yeonggyu', file: '교회소개_시무장로_김영규.jpg', src: pic('교회소개_시무장로_김영규'), name: '김영규', role: '시무장로', email: 'mtkimyg@hanmail.net', duties: ['예배위원회 위원장', '감사위원회 위원장'] },
+          { id: 'staff-yoo-jongsik', file: '교회소개_시무장로_유종식.jpg', src: pic('교회소개_시무장로_유종식'), name: '유종식', role: '시무장로', email: '', duties: ['관리위원회 위원장'] },
+          { id: 'staff-park-seonghun', file: '교회소개_시무장로_박성훈.jpg', src: pic('교회소개_시무장로_박성훈'), name: '박성훈', role: '시무장로', email: '', duties: ['재정위원회 위원장'] },
+          { id: 'staff-jang-myeongpil', file: '교회소개_시무장로_장명필.jpg', src: pic('교회소개_시무장로_장명필'), name: '장명필', role: '시무장로', email: '', duties: ['교육위원회 위원장'] },
+        ]},
+        { title: '은퇴장로', members: [
+          { id: 'staff-lee-sangrae', file: '교회소개_은퇴장로_이상래.jpg', src: pic('교회소개_은퇴장로_이상래'), name: '이상래', role: '은퇴장로', email: '', duties: [] },
+          { id: 'staff-yoon-jinwoo', file: '교회소개_은퇴장로_윤진우.jpg', src: pic('교회소개_은퇴장로_윤진우'), name: '윤진우', role: '은퇴장로', email: 'jhinwooyoon@hanmail.net', duties: [] },
+          { id: 'staff-hwang-seonyong', file: '교회소개_은퇴장로_황선용.jpg', src: pic('교회소개_은퇴장로_황선용'), name: '황선용', role: '은퇴장로', email: '', duties: [] },
+        ]},
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
