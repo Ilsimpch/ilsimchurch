@@ -1210,7 +1210,7 @@ class Component extends DCLogic {
           meta: '연령 : 중학교 1학년 – 고등학교 3학년 | 예배 : 주일 오전 11시 30분, 4층 중고등부실 | 담당교역자 : 김종환 부목사',
           lines: ['하나, 예배자로서 성경적 신앙고백과 가치관을 세우고 제자의 삶을 훈련합니다.', '하나, 소그룹에서 말씀과 삶을 나누며 진로와 신앙을 함께 고민합니다.', '하나, 부모님과 소통하며 다음 세대를 믿음 안에서 세워갑니다.'] },
         { id: 'dept-youth', group: '청년부', name: '청년부', photos: [1,2,3,4].map(n => ({ id: 'youth-' + n, file: '부서소개_청년부_' + n + '.jpg', src: pic('부서소개_청년부_' + n) })),
-          meta: '대상 : 대학생 · 직장 청년 | 예배 : 주일 오후 1시 30분, 본당 (주일 3부 예배 주관) | 담당교역자 : 김종욱 부목사',
+          meta: '대상 : 대학생 · 직장 청년 | 예배 : 주일 오후 1시 30분, 본당 (주일 3부 예배 주관) | 담당교역자 : 이수철 목사',
           lines: ['하나, 청년기의 시작을 하나님 말씀으로 채워갑니다.', '하나, 찬양과 교제로 서로의 신앙을 세워갑니다.', '하나, 주일 3부 예배를 섬기며 예배하는 삶을 배웁니다.'] },
       ].map((d, i) => ({ ...d, hidden: i !== this.state.dept, opacity: i === this.state.dept ? 1 : 0 })),
       newsDate: '2026년 9월 27일',
@@ -1259,7 +1259,8 @@ class Component extends DCLogic {
       staffGroups: [
         { title: '부교역자', members: [
           { id: 'staff-kim-jonghwan', file: '교회소개_부목사_김종환.jpg', src: pic('교회소개_부목사_김종환'), name: '김종환', role: '부목사', email: 'lyduce_kim@naver.com', duties: ['아동부, 중고등부 담당', '교육위원회 · 봉사위원회 · 관리위원회 담당', '1~7구역 담당'] },
-          { id: 'staff-kim-jongwook', file: '교회소개_부목사_김종욱.jpg', src: pic('교회소개_부목사_김종욱'), name: '김종욱', role: '부목사', email: 'skill1124@naver.com', duties: ['청년부 담당', '예배위원회 · 선교위원회 담당', '8~11구역 담당'] },
+          { id: 'staff-kim-jongwook', file: '교회소개_부목사_김종욱.jpg', src: pic('교회소개_부목사_김종욱'), name: '김종욱', role: '부목사', email: 'skill1124@naver.com', duties: ['예배위원회 · 선교위원회 담당', '8~11구역 담당'] },
+          { id: 'staff-lee-sucheol', file: '교회소개_목사_이수철.jpg', src: pic('교회소개_목사_이수철'), name: '이수철', role: '목사', email: '', duties: ['청년부 담당'] },
           { id: 'staff-yeom-seuram', file: '교회소개_교육전도사_염스람.jpg', src: pic('교회소개_교육전도사_염스람'), name: '염스람', role: '교육전도사', email: '', duties: ['유치부 담당'] },
         ]},
         { title: '직원', members: [
