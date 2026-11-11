@@ -1249,16 +1249,17 @@ class Component extends DCLogic {
     };
   }
   lbStop = (e) => { if (e && e.stopPropagation) e.stopPropagation(); };
-  // A Drive photo is first asked for through Drive's thumbnail address; if that fails the image
-  // falls back to Google's image host, then to the short-lived link the file list came with.
-  driveImg(id, w) { return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w' + w; }
+  // A Drive photo is shown through Google's image host (works for a public file without any
+  // sign-in — checked on the live site); if that fails the image falls back to Drive's own
+  // thumbnail address, then to the short-lived link the file list came with.
+  driveImg(id, w) { return 'https://lh3.googleusercontent.com/d/' + id + '=w' + w; }
   imgFail = (e) => {
     const img = e.currentTarget; const id = img.getAttribute('data-fid'); const w = img.getAttribute('data-w') || '640';
     if (!id) { img.style.display = 'none'; return; }
     if (img.dataset.tried !== id) { img.dataset.tried = id; img.dataset.n = '0'; }
     let t = '';
     Object.keys(this._photos || {}).some((k) => this._photos[k].some((p) => (p.id === id && p.t ? ((t = p.t), true) : false)));
-    const alts = ['https://lh3.googleusercontent.com/d/' + id + '=w' + w, t ? t.replace(/=s\d+$/, '=s' + w) : ''].filter(Boolean);
+    const alts = ['https://drive.google.com/thumbnail?id=' + id + '&sz=w' + w, t ? t.replace(/=s\d+$/, '=s' + w) : ''].filter(Boolean);
     const n = Number(img.dataset.n || 0);
     if (n < alts.length) { img.dataset.n = String(n + 1); img.src = alts[n]; } else { img.style.display = 'none'; }
   };
