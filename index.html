@@ -1202,7 +1202,7 @@ class Component extends DCLogic {
       const r = await fetch('https://www.googleapis.com/drive/v3/files?' + p);
       if (!r.ok) throw new Error('drive ' + r.status);
       const j = await r.json();
-      out.push(...(j.files || []));
+      out.push(...(j.files || []).map((f) => (f && typeof f.name === 'string' && f.name.normalize ? Object.assign(f, { name: f.name.normalize('NFC') }) : f)));
       token = j.nextPageToken || '';
       if (!token) break;
     }
@@ -1212,7 +1212,7 @@ class Component extends DCLogic {
     if (people !== undefined) this._people = people;
     if (bulletins !== undefined) this._bulletins = bulletins;
     if (feed !== undefined) this._feed = feed;
-    try { localStorage.setItem('ilsim.albums.v4', JSON.stringify({ t: this._albumT || Date.now(), albums: albums, people: this._people || null, bulletins: this._bulletins || null, feed: this._feed || null })); } catch (e) {}
+    try { localStorage.setItem('ilsim.albums.v5', JSON.stringify({ t: this._albumT || Date.now(), albums: albums, people: this._people || null, bulletins: this._bulletins || null, feed: this._feed || null })); } catch (e) {}
   }
   // A Google Sheet in the folder, read as rows of cells (Drive exports the first tab as CSV).
   parseCsv(text) {
@@ -1248,7 +1248,7 @@ class Component extends DCLogic {
     // The last result shows at once; after 5 minutes Drive is asked again behind it.
     let last = null;
     try {
-      const c = JSON.parse(localStorage.getItem('ilsim.albums.v4') || 'null');
+      const c = JSON.parse(localStorage.getItem('ilsim.albums.v5') || 'null');
       if (c && Array.isArray(c.albums)) {
         last = c.albums; this._albumT = c.t; this._people = c.people || null; this._bulletins = c.bulletins || null; this._feed = c.feed || null;
         this.setState({ albums: last, people: this._people, bulletins: this._bulletins, feed: this._feed });
