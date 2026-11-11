@@ -448,7 +448,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       .nav-links a[aria-current="page"] { border-bottom-color: var(--color-accent-700); }
       .hero-sec { padding-top: 8px !important; padding-bottom: 20px !important; }
       .hero-art { display: block !important; aspect-ratio: auto !important; background: transparent !important; overflow: visible !important; border-radius: 0 !important; }
-      .hero-img { position: static !important; height: auto !important; aspect-ratio: 16 / 10; object-position: 86% center !important; border-radius: var(--radius-md); }
+      .hero-img { position: static !important; height: auto !important; aspect-ratio: 16 / 10; object-position: 86% center !important; border-radius: var(--radius-md); width: 100% !important; max-width: 100% !important; -webkit-mask-image: none !important; mask-image: none !important; }
       .hero-wash { display: none !important; }
       .hero-sp { display: none !important; }
       .hero-text { width: auto !important; padding: 20px 0 0 !important; }
@@ -521,7 +521,7 @@ textarea.input { min-height: 90px; resize: vertical; }
     <div class="hero-art" style="position: relative; overflow: hidden; border-radius: var(--radius-md); background: #f1ebe4; display: flex; align-items: center;">
       <!-- keeps the picture at least this tall (a share of its width); taller text makes the box grow instead of being cut off -->
       <span class="hero-sp" aria-hidden="true" style="flex: none; width: 0; padding-top: 47.85%;"></span>
-      <img class="hero-img" src="assets/hero-art.webp" alt="햇살이 비치는 일심교회 본당과 꽃나무" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right top; display: block;">
+      <img class="hero-img" src="assets/hero-art.webp" alt="햇살이 비치는 일심교회 본당과 꽃나무" style="position: absolute; right: 0; top: -5.3%; height: 112.2%; width: auto; max-width: none; object-fit: cover; display: block; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%); mask-image: linear-gradient(90deg, transparent 0, #000 14%);">
       <span class="hero-wash" aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(243, 242, 242, 0.9) 0%, rgba(243, 242, 242, 0.5) 36%, rgba(243, 242, 242, 0) 60%);"></span>
       <div class="hero-text" style="position: relative; width: min(62%, 660px); padding: clamp(22px, 3.2vw, 38px) clamp(24px, 4.8vw, 64px);">
         <p class="hero-ref" style="display: flex; align-items: center; gap: 14px; margin: 0 0 16px; font-size: 15px; letter-spacing: 0.22em; color: #7a5f30;"><span aria-hidden="true" style="display: block; flex: none; width: 36px; height: 1px; background: #b9975b;"></span>이사야 56 : 7</p>
@@ -586,6 +586,18 @@ textarea.input { min-height: 90px; resize: vertical; }
             </p>
           </sc-for>
           <p style="margin: 20px 0 0; font-size: 15px; color: var(--color-neutral-700);">교회학교 예배 시간은 <a href="#worship" onClick="{{ goWorship }}">예배 안내</a>에서 볼 수 있습니다.</p>
+          <h2 class="m-wh2" style="font-size: 24px; line-height: 28px; margin: 28px 0 10px;">주보</h2>
+          <div class="m-jubo" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; font-size: 16.5px; line-height: 30px;">
+            <sc-for list="{{ bulletinChips }}" as="b" hint-placeholder-count="3">
+              <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" style="white-space: nowrap;">{{ b.short }}</a>
+            </sc-for>
+            <sc-if value="{{ bulletinNone }}" hint-placeholder-val="{{ false }}">
+              <span style="color: var(--color-neutral-700);">아직 올라온 주보가 없습니다.</span>
+            </sc-if>
+            <sc-if value="{{ bulletinMore }}" hint-placeholder-val="{{ false }}">
+              <a href="#story" onClick="{{ goStory }}" style="white-space: nowrap; font-size: 15px; color: var(--color-neutral-700);">지난 주보 →</a>
+            </sc-if>
+          </div>
         </div>
       </div>
       <hr style="height: 0; border: 0; border-top: 1px solid var(--color-text); margin: 0;">
@@ -619,20 +631,6 @@ textarea.input { min-height: 90px; resize: vertical; }
           </div>
         </sc-for>
         <a class="m-more" href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">소식 전체 보기 →</a>
-      </div>
-      <div>
-        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">주보</span>
-        <sc-for list="{{ bulletins }}" as="b" hint-placeholder-count="3">
-          <p style="display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-size: 16.5px; line-height: 28px;">
-            <span>{{ b.label }}</span>
-            <span style="flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.34em; border-bottom: 1px dotted var(--color-neutral-500);"></span>
-            <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" style="white-space: nowrap;">{{ b.kind }}</a>
-          </p>
-        </sc-for>
-        <sc-if value="{{ bulletinNone }}" hint-placeholder-val="{{ false }}">
-          <p style="margin: 0 0 8px; font-size: 16.5px; line-height: 28px; color: var(--color-neutral-700);">아직 올라온 주보가 없습니다.</p>
-        </sc-if>
-        <p style="margin: 20px 0 0; font-size: 16.5px; color: var(--color-neutral-700); max-width: 40ch;">매주 주일 오전에 새 주보가 올라옵니다. 지난 주보는 <a href="#story" onClick="{{ goStory }}">일심 이야기</a>에서 볼 수 있습니다.</p>
       </div>
     </section>
 
@@ -1287,6 +1285,9 @@ class Component extends DCLogic {
         if (m) return m[1] + '-' + two(m[2]) + '-' + two(m[3]);
         m = f.name.match(/(?:^|\D)(\d{2})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})/);
         if (m) return '20' + m[1] + '-' + two(m[2]) + '-' + two(m[3]);
+        // no year in the name ("11월 15일 주보", "11.15 주보"): the year it was uploaded
+        m = f.name.match(/(\d{1,2})\s*월\s*(\d{1,2})\s*일/) || f.name.match(/(?:^|[^\d.])(\d{1,2})[.\/\-](\d{1,2})(?:[^\d]|$)/);
+        if (m && Number(m[1]) >= 1 && Number(m[1]) <= 12 && Number(m[2]) >= 1 && Number(m[2]) <= 31) return ((f.createdTime || '').slice(0, 4) || String(new Date().getFullYear())) + '-' + two(m[1]) + '-' + two(m[2]);
         return (f.createdTime || '').slice(0, 10);
       };
       const bulletins = bulletinFiles.map((f) => ({ id: f.id, label: f.name.replace(/\.[A-Za-z0-9]{2,5}$/, ''), kind: f.mimeType === 'application/pdf' ? 'PDF' : '보기',
@@ -1503,8 +1504,11 @@ class Component extends DCLogic {
     const homePick = homePool.filter((a) => a.count > 0).concat(homePool.filter((a) => !(a.count > 0))).slice(0, 4);
     // 주보: files in the Drive folder "_주보" on the published site; the canvas keeps three sample rows.
     const bulletinList = albumCfg
-      ? (st.bulletins || []).map((b) => ({ label: b.label, kind: b.kind, href: 'https://drive.google.com/file/d/' + b.id + '/view', target: '_blank' }))
-      : ['2026년 9월 27일 주보', '2026년 9월 20일 주보', '2026년 9월 13일 주보'].map((label) => ({ label, kind: 'PDF', href: '#', target: undefined }));
+      ? (st.bulletins || []).map((b) => {
+        const dm = (b.sort || '').match(/^\d{4}-(\d{2})-(\d{2})/);
+        return { label: b.label, short: dm ? Number(dm[1]) + '월 ' + Number(dm[2]) + '일' : b.label, kind: b.kind, href: 'https://drive.google.com/file/d/' + b.id + '/view', target: '_blank' };
+      })
+      : ['9월 27일', '9월 20일', '9월 13일'].map((d) => ({ label: '2026년 ' + d + ' 주보', short: d, kind: 'PDF', href: '#', target: undefined }));
     // 교회 일정 · 교회 소식 from the two Google Sheets (published site). 일정: rows whose day (or last day) has
     // passed drop out by themselves; the rest are listed soonest first.
     const feed = st.feed;
@@ -1678,7 +1682,8 @@ class Component extends DCLogic {
         { title: '가정과 자녀를 위한 집중기도회', when: '매주 수요예배 후 · 본당' },
         { title: '금요전도모임', when: '매주 금요일 오후 2시 30분 · 1층 로비' },
       ].filter(() => !albumCfg).concat(albumCfg ? liveNewsRows.slice(0, 4).map((r) => ({ title: r[1], when: r[2] || '' })) : []),
-      bulletins: bulletinList.slice(0, 3),
+      bulletinChips: bulletinList.slice(0, 4),
+      bulletinMore: bulletinList.length > 4,
       bulletinsAll: bulletinList.slice(0, 26),
       bulletinNone: !!albumCfg && !!st.bulletins && !st.bulletins.length,
       album,
