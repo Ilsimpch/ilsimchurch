@@ -433,6 +433,8 @@ textarea.input { min-height: 90px; resize: vertical; }
   .alb-photo:hover { box-shadow: 0 0 0 2px var(--color-accent-700); }
   .lb-btn { position: absolute; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0 0 4px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; }
   .lb-btn:hover { background: rgba(255, 255, 255, 0.26); }
+  /* 메뉴 이동 디졸브 (see dissolve() in the logic) */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.45s; animation-timing-function: ease-in-out; }
   /* 주보처럼 글씨를 읽는 그림: 화면 높이에 맞춰 줄이지 않고 크게 보여 주고, 아래로 내려 가며 본다 */
   .lb.lb-read { align-items: flex-start !important; overflow-y: auto; overscroll-behavior: contain; }
   .lb.lb-read > img { max-width: min(96vw, 1200px) !important; max-height: none !important; margin: 64px auto 40px; background: #fff; }
@@ -555,7 +557,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       <hr style="height: 5px; border: 0; margin: 0; border-top: 2px solid var(--color-text); border-bottom: 1px solid var(--color-text);">
       <div class="home-duo" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 28px clamp(28px, 5vw, 96px); padding: 28px 0;">
         <div>
-          <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">예배 영상</span>
+          <h2 class="m-kicker" style="display: block; font-size: 26px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-800); margin: 0 0 18px;">예배 영상</h2>
           <div class="m-1col" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px;">
             <sc-for list="{{ videoTiles }}" as="v" hint-placeholder-count="4">
               <div>
@@ -578,8 +580,8 @@ textarea.input { min-height: 90px; resize: vertical; }
           <a class="m-more" href="#worship" onClick="{{ goWorship }}" style="display:inline-block; margin-top: 20px; font-size: 16.5px;">지난 설교 보기 →</a>
         </div>
         <div>
-          <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">예배 안내</span>
-          <h2 class="m-wh2" style="font-size: 24px; line-height: 28px; margin: 0 0 14px;">주일 예배</h2>
+          <h2 class="m-kicker" style="display: block; font-size: 26px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-800); margin: 0 0 18px;">예배 안내</h2>
+          <h3 class="m-wh2" style="font-size: 20px; line-height: 26px; margin: 0 0 10px;">주일 예배</h3>
           <sc-for list="{{ sundayRows }}" as="r" hint-placeholder-count="3">
             <p class="m-wrow" style="display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 16.5px; line-height: 32px;">
               <span>{{ r.name }}</span>
@@ -588,7 +590,7 @@ textarea.input { min-height: 90px; resize: vertical; }
               <span style="font-family: var(--font-heading); font-weight: 600; font-size: 17px; white-space: nowrap;">{{ r.time }}</span>
             </p>
           </sc-for>
-          <h2 class="m-wh2" style="font-size: 24px; line-height: 28px; margin: 28px 0 14px;">주중 예배 · 기도회</h2>
+          <h3 class="m-wh2" style="font-size: 20px; line-height: 26px; margin: 26px 0 10px;">주중 예배 · 기도회</h3>
           <sc-for list="{{ weekRows }}" as="r" hint-placeholder-count="3">
             <p class="m-wrow" style="display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 16.5px; line-height: 32px;">
               <span>{{ r.name }}</span>
@@ -605,7 +607,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 
     <section style="padding: 0 0 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 42px clamp(28px, 4vw, 64px);">
       <div>
-        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">교회 일정</span>
+        <h2 class="m-kicker" style="display: block; font-size: 26px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-800); margin: 0 0 18px;">교회 일정</h2>
         <sc-for list="{{ schedule }}" as="s" hint-placeholder-count="6">
           <div class="m-sched" style="display: flex; gap: 14px; align-items: baseline; padding: 0 0 14px;">
             <span style="flex: none; width: 5.2em; font-family: var(--font-heading); font-weight: 600; font-size: 16.5px; line-height: 26px; color: var(--color-accent-700); font-feature-settings: 'tnum' 1;">{{ s.date }}</span>
@@ -620,7 +622,7 @@ textarea.input { min-height: 90px; resize: vertical; }
         </sc-if>
       </div>
       <div>
-        <span class="m-kicker" style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-bottom: 14px;">교회 소식</span>
+        <h2 class="m-kicker" style="display: block; font-size: 26px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-800); margin: 0 0 18px;">교회 소식</h2>
         <sc-if value="{{ newsNone }}" hint-placeholder-val="{{ false }}">
           <p style="margin: 0 0 16px; font-size: 16.5px; line-height: 26px; color: var(--color-neutral-700);">새 소식이 없습니다.</p>
         </sc-if>
@@ -636,7 +638,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 
     <section style="padding: 0 0 84px;">
       <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
-        <h2 style="font-size: 28px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">교회 앨범</h2>
+        <h2 class="m-kicker" style="font-size: 26px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-800); margin: 0;">교회 앨범</h2>
         <a href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">앨범 전체 보기 →</a>
       </div>
       <sc-if value="{{ albumLive }}" hint-placeholder-val="{{ false }}">
@@ -1283,19 +1285,47 @@ class Component extends DCLogic {
       // Same title more than once? People number them ("추수감사주일 2", "추수감사주일(3)"): the number
       // at the very end (1–3 digits) is dropped so only the title shows. A year at the end stays.
       const bare = (t) => { const m = t.match(/^(.*[^\d])[\s_\-]*[(\[（]?\s*\d{1,3}\s*[)\]）]?$/); const c = (m ? m[1].replace(/[\s_\-(\[（]+$/, '') : t).replace(/[\s.]+$/, ''); return c || t; };
+      // The date an event really happened is written in the name; without one, the upload day is used.
+      //   "2026.10.27 성지순례"  "2026-10-27 …"  "2026년 10월 27일 …"  "20261027 …"  "성지순례 2026.10.27"
+      //   "2026.10 성지순례" (month only)      "10월 27일 성지순례"  "10.27 성지순례" (the year it was uploaded)
+      const p2 = (n) => String(n).padStart(2, '0');
+      const okMD = (mo, d) => mo >= 1 && mo <= 12 && d >= 1 && d <= 31;
+      const named = (raw, created) => {
+        let m = raw.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})(?!\d)\s*일?[\s_\-.,]*(.*)$/);
+        if (m && okMD(+m[2], +m[3])) return { y: +m[1], mo: +m[2], d: +m[3], rest: m[4] };
+        m = raw.match(/^(\d{4})(\d{2})(\d{2})(?!\d)[\s_\-.,]*(.*)$/);
+        if (m && +m[1] >= 1990 && +m[1] <= 2099 && okMD(+m[2], +m[3])) return { y: +m[1], mo: +m[2], d: +m[3], rest: m[4] };
+        m = raw.match(/^(.*?)[\s_\-.,(\[（]*(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*일?\s*[)\]）]?$/);
+        if (m && m[1] && okMD(+m[3], +m[4])) return { y: +m[2], mo: +m[3], d: +m[4], rest: m[1] };
+        m = raw.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*월?\s+(.+)$/);
+        if (m && +m[2] >= 1 && +m[2] <= 12) return { y: +m[1], mo: +m[2], d: 0, rest: m[3] };
+        m = raw.match(/^(\d{1,2})\s*월\s*(\d{1,2})\s*일[\s_\-.,]*(.+)$/) || raw.match(/^(\d{1,2})[.\-](\d{1,2})\s+(.+)$/);
+        if (m && okMD(+m[1], +m[2])) {
+          const c = new Date(created || Date.now()); let y = isNaN(c) ? new Date().getFullYear() : c.getFullYear();
+          // "12월 24일 …" uploaded in January belongs to the year before
+          if (!isNaN(c) && new Date(y, +m[1] - 1, +m[2]).getTime() > c.getTime() + 3 * 864e5) y -= 1;
+          return { y: y, mo: +m[1], d: +m[2], rest: m[3] };
+        }
+        return null;
+      };
+      const when = (n, created) => (n
+        ? { date: n.y + '. ' + n.mo + (n.d ? '. ' + n.d : ''), sort: n.y + '-' + p2(n.mo) + '-' + p2(n.d) + ' ' + (created || '') }
+        : { date: day(created), sort: created || '' });
       const albums = [];
       const add = (f, dept) => {
         if (hidden(f)) return;
         if (isFolder(f)) {
-          // "2026.11 추수감사주일" → title "2026 추수감사주일", date "2026. 11"; without the prefix, the day the folder was made
-          const m = f.name.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*월?\s+(.+)$/);
+          // "2026.11 추수감사주일" → title "2026 추수감사주일", date "2026. 11"; "2026.11.15 …" → "2026. 11. 15"
+          const n = named(f.name, f.createdTime), w = when(n, f.createdTime);
           const o = old[f.id] || {};
-          albums.push({ id: f.id, kind: 'album', name: f.name, dept: dept, title: m ? m[1] + ' ' + bare(m[3]) : bare(f.name), date: m ? m[1] + '. ' + Number(m[2]) : day(f.createdTime),
-            sort: m ? m[1] + '-' + String(m[2]).padStart(2, '0') + '-00' : (f.createdTime || ''), count: o.count, cover: o.cover });
+          albums.push({ id: f.id, kind: 'album', name: f.name, dept: dept, title: n && n.rest ? n.y + ' ' + bare(n.rest) : bare(f.name), date: w.date,
+            sort: w.sort, count: o.count, cover: o.cover });
         } else {
-          // a photo on its own: its file name is the caption, the upload day its date
-          albums.push({ id: f.id, kind: 'photo', name: f.name, dept: dept, title: bare(f.name.replace(/\.[A-Za-z0-9]{2,5}$/, '')), date: day(f.createdTime),
-            sort: f.createdTime || '', count: 1, cover: f.id });
+          // a photo on its own: its file name is the caption; a date in the name is its date, else the upload day
+          const raw = f.name.replace(/\.[A-Za-z0-9]{2,5}$/, '');
+          const n = named(raw, f.createdTime), w = when(n, f.createdTime);
+          albums.push({ id: f.id, kind: 'photo', name: f.name, dept: dept, title: n && /[^\d\s_\-.,()]/.test(n.rest) ? bare(n.rest) : bare(raw), date: w.date,
+            sort: w.sort, count: 1, cover: f.id });
         }
       };
       top.filter((f) => f.mimeType.indexOf('image/') === 0).forEach((f) => add(f, ''));
@@ -1357,10 +1387,9 @@ class Component extends DCLogic {
   openAlbum(id) {
     return (e) => {
       if (e && e.preventDefault) e.preventDefault();
-      this.setState({ page: 'story', albumOpen: id, lb: null, lbSolo: null });
-      history.replaceState(null, '', '#story');
-      this.ensurePhotos([id]);
-      setTimeout(() => { const el = document.getElementById('albums'); if (el) scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76 }); }, 80);
+      const update = () => { this.setState({ page: 'story', albumOpen: id, lb: null, lbSolo: null }); history.replaceState(null, '', '#story'); this.ensurePhotos([id]); };
+      const toAlbums = () => { const el = document.getElementById('albums'); if (el) scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76 }); };
+      if (this.state.page !== 'story') this.dissolve(update, () => { toAlbums(); setTimeout(toAlbums, 80); }); else { update(); setTimeout(toAlbums, 80); }
     };
   }
   albumBack = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumOpen: null, lb: null, lbSolo: null }); };
@@ -1424,8 +1453,44 @@ class Component extends DCLogic {
     addEventListener('hashchange', read);
   }
   componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); removeEventListener('keydown', this._onKey); }
+  // 메뉴를 옮길 때의 디졸브: 지금 화면이 서서히 사라지면서 새 화면이 겹쳐 나타난다.
+  // The published site cross-fades the two screens (View Transitions); where the browser can't do that,
+  // and on the canvas, the new screen simply fades in. `after` runs once the new screen is drawn.
+  dissolve(update, after) {
+    const done = after || (() => {});
+    const still = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Resolves once the new screen is in the page. Not requestAnimationFrame: the browser holds frames back
+    // while it waits for exactly this, so waiting on a frame here would freeze the page until it gave up.
+    const drawn = () => new Promise((r) => {
+      let once = false; let mo = null;
+      const fin = () => { if (once) return; once = true; if (mo) mo.disconnect(); setTimeout(r, 0); };
+      try { mo = new MutationObserver(fin); mo.observe(document.body, { childList: true, subtree: true, attributes: true }); } catch (e) {}
+      setTimeout(fin, 250);
+    });
+    if (still) { update(); drawn().then(done); return; }
+    if (this.albumCfg() && typeof document.startViewTransition === 'function') {
+      let started = false;
+      try {
+        const t = document.startViewTransition(() => { started = true; const w = drawn(); update(); return w.then(done); });
+        if (t && t.ready && t.ready.catch) t.ready.catch(() => {});
+        if (t && t.updateCallbackDone && t.updateCallbackDone.catch) t.updateCallbackDone.catch(() => {});
+        return;
+      } catch (e) { if (started) return; }
+    }
+    const w = drawn(); update();
+    w.then(() => {
+      done();
+      const nav = document.querySelector('nav.nav');
+      if (!nav || !nav.parentElement) return;
+      Array.prototype.forEach.call(nav.parentElement.children, (el) => { if (el !== nav && el.animate) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease' }); });
+    });
+  }
   go(page) {
-    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page, albumOpen: null, lb: null, lbSolo: null }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const update = () => { this.setState({ page, albumOpen: null, lb: null, lbSolo: null }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
+      if (this.state.page === page && !this.state.albumOpen) update(); else this.dissolve(update);
+    };
   }
   jump(id) {
     return (e) => {
