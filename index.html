@@ -443,6 +443,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       .hero-img { position: static !important; height: auto !important; aspect-ratio: 16 / 10; object-position: 86% center !important; border-radius: var(--radius-md); }
       .hero-wash { display: none !important; }
       .hero-text { width: auto !important; padding: 18px 0 0 !important; }
+      .hero-lead, .hero-tail { font-size: 14px !important; line-height: 22px !important; max-width: none !important; }
       h1 { font-size: 30px !important; line-height: 1.15 !important; }
       h2 { font-size: 21px !important; line-height: 1.3 !important; }
       h3 { font-size: 17px !important; line-height: 1.35 !important; }
@@ -507,12 +508,14 @@ textarea.input { min-height: 90px; resize: vertical; }
       <img class="hero-img" src="assets/hero-art.webp" alt="햇살이 비치는 일심교회 본당과 꽃나무" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; display: block;">
       <span class="hero-wash" aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(243, 242, 242, 0.85) 0%, rgba(243, 242, 242, 0.42) 34%, rgba(243, 242, 242, 0) 58%);"></span>
       <div class="hero-text" style="position: relative; width: min(60%, 640px); padding: clamp(24px, 4.4vw, 60px);">
-        <h1 style="font-size: clamp(32px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 0;">
+        <p class="hero-lead" style="font-size: 16.5px; line-height: 28px; max-width: 29em; margin: 0; color: var(--color-neutral-800);">“내가 곧 그들을 나의 성산으로 인도하여 기도하는 내 집에서 그들을 기쁘게 할 것이며 그들의 번제와 희생을 나의 제단에서 기꺼이 받게 되리니 이는</p>
+        <h1 style="font-size: clamp(32px, 4.6vw, 60px); line-height: 1.12; letter-spacing: -0.02em; margin: 10px 0 0;">
           <span style="display:block;">내 집은 만민이</span>
           <span class="hero-l2" style="display:block;">기도하는 집이라</span>
         </h1>
-        <p class="hero-ref" style="font-size: 16.5px; margin: 14px 0 0; color: var(--color-neutral-700); letter-spacing: 0.04em;">이사야 56장 7절</p>
-        <p class="hero-intro" style="font-size: 17px; max-width: 26em; margin: 24px 0 0;">일심교회는 대치동 은마아파트 후문에 있는 예장통합 교회입니다. 교우 간의 따뜻한 사랑과 이웃을 향한 섬김, 다음 세대를 향한 열정으로 함께 예배하는 교회에 여러분을 초대합니다.</p>
+        <p class="hero-tail" style="font-size: 16.5px; line-height: 28px; margin: 12px 0 0; color: var(--color-neutral-800);">일컬음이 될 것임이라” <span class="hero-ref" style="margin-left: 8px; color: var(--color-neutral-700); letter-spacing: 0.04em; white-space: nowrap;">— 이사야 56:7</span></p>
+        <span class="hero-rule" aria-hidden="true" style="display: block; width: 44px; height: 1px; margin: 22px 0 0; background: var(--color-neutral-500);"></span>
+        <p class="hero-intro" style="font-size: 17px; max-width: 26em; margin: 18px 0 0;">일심교회는 대치동 은마아파트 후문에 있는 예장통합 교회입니다. 교우 간의 따뜻한 사랑과 이웃을 향한 섬김, 다음 세대를 향한 열정으로 함께 예배하는 교회에 여러분을 초대합니다.</p>
         <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 28px;">
           <a href="#worship" onClick="{{ goWorship }}" class="btn btn-primary" style="text-decoration:none;">예배 안내</a>
           <a href="#about" onClick="{{ goAbout }}" class="btn btn-ghost m-first" style="text-decoration:none; color: var(--color-accent-700);">처음 오시는 분</a>
@@ -625,11 +628,6 @@ textarea.input { min-height: 90px; resize: vertical; }
           </figure>
         </sc-for>
       </div>
-    </section>
-
-    <section style="padding: 0 0 84px;">
-      <blockquote style="font-style: italic; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.4; letter-spacing: -0.01em; max-width: 34ch; margin: 0;">“내가 곧 그들을 나의 성산으로 인도하여 기도하는 내 집에서 그들을 기쁘게 할 것이며 그들의 번제와 희생을 나의 제단에서 기꺼이 받게 되리니 이는 내 집은 만민이 기도하는 집이라 일컬음이 될 것임이라”</blockquote>
-      <p style="margin: 28px 0 0; font-size: 16.5px; color: var(--color-neutral-700);">— 이사야 56:7</p>
     </section>
   </div>
 </sc-if>
