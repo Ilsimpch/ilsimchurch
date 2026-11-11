@@ -945,7 +945,7 @@ class Component extends DCLogic {
   // No server and no API key. YouTube's IFrame Player API lists a playlist's video ids
   // (newest first, as the channel keeps them) and the public oEmbed endpoint gives each
   // title. Sunday takes the newest 2부 service; a video that can't be shown is skipped.
-  // Results are kept for 20 minutes so repeat visits don't ask YouTube again.
+  // Results are kept so repeat visits show at once; after 5 minutes they are checked again.
   ytTitle(id) {
     return fetch('https://www.youtube.com/oembed?format=json&url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + id))
       .then((r) => (r.ok ? r.json() : null))
@@ -1021,20 +1021,29 @@ class Component extends DCLogic {
   }
   async loadLatest() {
     const KEY = 'ilsim.latestVideos.v1';
+    // The last result shows at once. Once it is 5 minutes old YouTube is asked again behind it,
+    // so a newly uploaded service turns up on the next visit and the tiles never go blank meanwhile.
+    let last = null;
     try {
       const c = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (c && c.vids && Date.now() - c.t < 20 * 60 * 1000) { this.setState({ vids: c.vids }); return; }
+      if (c && c.vids) {
+        last = c.vids;
+        this.setState({ vids: last });
+        if (Date.now() - c.t < 5 * 60 * 1000) return;
+      }
     } catch (e) {}
     const is2 = (t) => /2\s*부/.test(t);
-    const vids = {};
+    const vids = Object.assign({}, last);
+    let got = false;
     for (const key of ['sunday', 'open', 'wed', 'fri', 'dawn']) {
       const v = await this.ytLatest(this.playlists[key], key === 'sunday' ? is2 : null);
       if (v) {
         vids[key] = v;
+        got = true;
         if (this._alive) this.setState({ vids: Object.assign({}, vids) });
       }
     }
-    if (Object.keys(vids).length) {
+    if (got) {
       try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), vids: vids })); } catch (e) {}
     }
   }
