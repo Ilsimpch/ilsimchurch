@@ -429,6 +429,22 @@ textarea.input { min-height: 90px; resize: vertical; }
     .home-alb { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: calc((clamp(28px, 5vw, 96px) + 32px) / 3); }
   }
   @media (max-width: 899.98px) { .home-duo { grid-template-columns: minmax(0, 1fr) !important; } }
+  /* 옆으로 넘겨 보는 줄 (교회 앨범 · 주보 · 부서 사진): 한 화면분씩 가로로 놓고 화살표나 손가락으로 넘긴다.
+     How many fit on one screenful is decided in the logic (carCols / homeCols) with the same widths as here. */
+  .car { position: relative; }
+  .car-track { display: flex; gap: 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: none; -ms-overflow-style: none; }
+  .car-track::-webkit-scrollbar { display: none; }
+  .car-page { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; align-content: start; align-items: start; }
+  .car-std { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+  @media (max-width: 899.98px) { .car-std { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .car .alb-card:hover .alb-cover { box-shadow: none; outline: 2px solid var(--color-accent-700); outline-offset: -2px; }
+  .car-btn { position: absolute; top: var(--car-top, 50%); z-index: 2; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-top: -22px; padding: 0 0 4px; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 50%; background: var(--color-bg); color: var(--color-text); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16); font-size: 28px; line-height: 1; cursor: pointer; transition: opacity 0.2s; }
+  .car-btn:hover { color: var(--color-accent-700); border-color: var(--color-accent-700); }
+  .car-prev { left: max(-22px, calc(6px - clamp(20px, 5vw, 72px))); }
+  .car-next { right: max(-22px, calc(6px - clamp(20px, 5vw, 72px))); }
+  .car-in .car-prev { left: 8px; } .car-in .car-next { right: 8px; }
+  .car-prev, .car.car-at-end .car-next { opacity: 0; pointer-events: none; }
+  .car.car-moved:not(.car-at-start) .car-prev { opacity: 1; pointer-events: auto; }
   .alb-photo { display: block; aspect-ratio: 1 / 1; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
   .alb-photo:hover { box-shadow: 0 0 0 2px var(--color-accent-700); }
   .lb-btn { position: absolute; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0 0 4px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; }
@@ -642,8 +658,11 @@ textarea.input { min-height: 90px; resize: vertical; }
         <a href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">앨범 전체 보기 →</a>
       </div>
       <sc-if value="{{ albumLive }}" hint-placeholder-val="{{ false }}">
-      <div class="m-2col home-alb">
-        <sc-for list="{{ albumHomeLive }}" as="a" hint-placeholder-count="4">
+      <div class="car" style="--car-top: 44%;">
+        <div class="car-track">
+          <sc-for list="{{ albumHomePages }}" as="pg" hint-placeholder-count="1">
+            <div class="car-page m-2col home-alb">
+              <sc-for list="{{ pg.items }}" as="a" hint-placeholder-count="4">
           <a href="#story" onClick="{{ a.open }}" class="alb-card">
             <div class="alb-cover" style="position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
               <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.empty }}</span>
@@ -653,7 +672,14 @@ textarea.input { min-height: 90px; resize: vertical; }
             </div>
             <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.meta }}</span></div>
           </a>
-        </sc-for>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ albumHomeMulti }}" hint-placeholder-val="{{ false }}">
+          <button type="button" class="car-btn car-prev" aria-label="이전 사진들" onClick="{{ carPrev }}">‹</button>
+          <button type="button" class="car-btn car-next" aria-label="다음 사진들" onClick="{{ carNext }}">›</button>
+        </sc-if>
       </div>
       <sc-if value="{{ albumErr }}" hint-placeholder-val="{{ false }}">
         <p style="margin: 0; font-size: 16.5px; color: var(--color-neutral-700);">앨범을 불러오지 못했습니다. <a href="{{ albumDriveHref }}" target="_blank" rel="noopener">구글 드라이브에서 보기 ↗</a></p>
@@ -798,8 +824,11 @@ textarea.input { min-height: 90px; resize: vertical; }
 
     <section id="jubo" style="padding: 0 0 84px;">
       <h2 style="font-size: 24px; line-height: 28px; margin: 0 0 16px;">주보</h2>
-      <div class="m-2col" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: start;">
-        <sc-for list="{{ bulletinCards }}" as="b" hint-placeholder-count="4">
+      <div class="car" style="--car-top: 42%;">
+        <div class="car-track">
+          <sc-for list="{{ bulletinPages }}" as="pg" hint-placeholder-count="1">
+            <div class="car-page car-std m-2col">
+              <sc-for list="{{ pg.items }}" as="b" hint-placeholder-count="4">
           <a href="{{ b.href }}" target="{{ b.target }}" rel="noopener" onClick="{{ b.open }}" class="alb-card">
             <!-- the picture keeps its own shape; the 4:3 box underneath only holds the place until it loads -->
             <div class="alb-cover" style="display: grid; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
@@ -810,13 +839,17 @@ textarea.input { min-height: 90px; resize: vertical; }
             </div>
             <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ b.label }}</div>
           </a>
-        </sc-for>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ bulletinMulti }}" hint-placeholder-val="{{ false }}">
+          <button type="button" class="car-btn car-prev" aria-label="이전 주보" onClick="{{ carPrev }}">‹</button>
+          <button type="button" class="car-btn car-next" aria-label="다음 주보" onClick="{{ carNext }}">›</button>
+        </sc-if>
       </div>
       <sc-if value="{{ bulletinNone }}" hint-placeholder-val="{{ false }}">
         <p style="margin: 0; font-size: 16.5px; line-height: 26px; color: var(--color-neutral-700);">아직 올라온 주보가 없습니다.</p>
-      </sc-if>
-      <sc-if value="{{ bulletinMore }}" hint-placeholder-val="{{ false }}">
-        <p style="margin: 20px 0 0; font-size: 16.5px;"><a href="#story" onClick="{{ goStory }}">지난 주보 전체 보기 →</a></p>
       </sc-if>
     </section>
 
@@ -910,13 +943,44 @@ textarea.input { min-height: 90px; resize: vertical; }
         <div id="{{ d.id }}" aria-hidden="{{ d.hidden }}" style="flex: 0 0 100%; min-width: 0; padding: 0 0 28px; transition: opacity 0.4s; opacity: {{ d.opacity }};">
           <span style="display:block; font-size: 15px; letter-spacing: 0.08em; color: var(--color-accent-700); margin-bottom: 10px;">{{ d.group }}</span>
           <h2 style="font-size: clamp(28px, 3vw, 36px); line-height: 1.2; margin: 0; letter-spacing: -0.015em;">{{ d.name }}</h2>
-          <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 14px; margin-top: 28px;">
+          <sc-if value="{{ d.slots }}" hint-placeholder-val="{{ true }}">
+          <div class="m-2col" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 28px;">
             <sc-for list="{{ d.photos }}" as="ph" hint-placeholder-count="4">
               <div style="aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden;">
                 <image-slot id="{{ ph.id }}" shape="rect" fit="cover" src="{{ ph.src }}" placeholder="{{ ph.file }}" role="img" aria-label="{{ d.name }} 사진"></image-slot>
               </div>
             </sc-for>
           </div>
+          </sc-if>
+          <sc-if value="{{ d.live }}" hint-placeholder-val="{{ false }}">
+          <!-- published site: whatever is in the department's folder of the church Drive, newest first -->
+          <div class="car car-in" style="margin-top: 28px; --car-top: 38%;">
+            <div class="car-track">
+              <sc-for list="{{ d.pages }}" as="pg" hint-placeholder-count="0">
+                <div class="car-page car-std m-2col">
+                  <sc-for list="{{ pg.items }}" as="a" hint-placeholder-count="0">
+            <a href="#story" onClick="{{ a.open }}" class="alb-card">
+                  <div class="alb-cover" style="position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.empty }}</span>
+                    <sc-if value="{{ a.cover }}" hint-placeholder-val="{{ false }}">
+                      <img src="{{ a.cover }}" data-fid="{{ a.coverId }}" data-w="640" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </sc-if>
+                  </div>
+                  <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.meta }}</span></div>
+                </a>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ d.multi }}" hint-placeholder-val="{{ false }}">
+              <button type="button" class="car-btn car-prev" aria-label="이전 사진들" onClick="{{ carPrev }}">‹</button>
+              <button type="button" class="car-btn car-next" aria-label="다음 사진들" onClick="{{ carNext }}">›</button>
+            </sc-if>
+          </div>
+          <sc-if value="{{ d.none }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 28px 0 0; font-size: 16.5px; color: var(--color-neutral-700);">사진을 준비하고 있습니다.</p>
+          </sc-if>
+          </sc-if>
           <p style="margin: 28px 0 0; font-size: 17px; line-height: 28px; font-family: var(--font-heading); font-weight: 600;">{{ d.meta }}</p>
           <sc-for list="{{ d.lines }}" as="l" hint-placeholder-count="3">
             <p style="margin: 6px 0 0; font-size: 16.5px; line-height: 26px; color: var(--color-neutral-800); max-width: 64ch;">{{ l }}</p>
@@ -997,8 +1061,11 @@ textarea.input { min-height: 90px; resize: vertical; }
             <a href="#story" onClick="{{ t.go }}" aria-current="{{ t.current }}" style="font-size: 16.5px; line-height: 26px; font-family: var(--font-heading); font-weight: 600; color: {{ t.color }}; border-bottom: 2px solid {{ t.underline }}; padding-bottom: 2px;" style-hover="color: var(--color-accent-700);">{{ t.label }}</a>
           </sc-for>
         </div>
-        <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 20px;">
-          <sc-for list="{{ albumCards }}" as="a" hint-placeholder-count="0">
+        <div class="car" style="--car-top: 46%;">
+          <div class="car-track">
+            <sc-for list="{{ albumPages }}" as="pg" hint-placeholder-count="0">
+              <div class="car-page car-std m-2col">
+                <sc-for list="{{ pg.items }}" as="a" hint-placeholder-count="0">
             <a href="#story" onClick="{{ a.open }}" class="alb-card">
               <div class="alb-cover" style="position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
                 <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.empty }}</span>
@@ -1008,11 +1075,15 @@ textarea.input { min-height: 90px; resize: vertical; }
               </div>
               <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.meta }}</span></div>
             </a>
-          </sc-for>
-        </div>
-        <sc-if value="{{ albumMore }}" hint-placeholder-val="{{ false }}">
-          <p style="margin: 28px 0 0;"><button type="button" class="btn btn-ghost" onClick="{{ albumShowMore }}">앨범 더 보기</button></p>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ albumMulti }}" hint-placeholder-val="{{ false }}">
+          <button type="button" class="car-btn car-prev" aria-label="이전 앨범들" onClick="{{ carPrev }}">‹</button>
+          <button type="button" class="car-btn car-next" aria-label="다음 앨범들" onClick="{{ carNext }}">›</button>
         </sc-if>
+        </div>
         <sc-if value="{{ albumNone }}" hint-placeholder-val="{{ false }}">
           <p style="margin: 0; font-size: 16.5px; color: var(--color-neutral-700);">아직 올라온 앨범이 없습니다.</p>
         </sc-if>
@@ -1071,7 +1142,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"season":{"editor":"enum","options":["auto","winter","summer"],"default":"auto","tsType":"string","section":"예배 시간"},"youtubeId":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"youtubeIdOpen":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"youtubeIdWed":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 수요예배"},"youtubeIdDawn":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 새벽예배"},"youtubeIdFri":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 금요기도회"},"videoMode":{"editor":"enum","options":["auto","live"],"default":"auto","tsType":"string","section":"기타"},"channelUrl":{"editor":"text","default":"","tsType":"string","section":"기타"},"$preview":{"width":1280,"height":2700}}'>
 class Component extends DCLogic {
-  state = { page: 'home', dept: 0, newsOpen: false, vids: null, albums: null, albumErr: false, albumDept: '', albumShow: 12, albumOpen: null, photoRev: 0, lb: null, lbSolo: null, people: null, bulletins: null, feed: null };
+  state = { page: 'home', dept: 0, newsOpen: false, vids: null, albums: null, albumErr: false, albumDept: '', albumShow: 12, cols: (typeof innerWidth === 'number' && innerWidth <= 640) ? 2 : ((typeof innerWidth === 'number' && innerWidth < 900) ? 3 : 4), homeCols: (typeof innerWidth === 'number' && innerWidth < 900) ? 2 : 4, albumOpen: null, photoRev: 0, lb: null, lbSolo: null, people: null, bulletins: null, feed: null };
   // One YouTube playlist per service. The channel keeps each newest-first.
   playlists = {
     sunday: 'PL22_WjwmV4sYWhPrUAcTdLMT98NFzQMUm',
@@ -1350,8 +1421,8 @@ class Component extends DCLogic {
       if (!this._alive) return;
       this.setState({ albums: albums, people: people, bulletins: bulletins, feed: feed, albumErr: false });
       this.saveAlbums(albums, people, bulletins, feed);
-      const want = albums.filter((a) => a.kind === 'album').slice(0, 12).map((a) => a.id);
-      albums.filter((a) => a.kind === 'album' && a.dept.indexOf('행사') >= 0).slice(0, 4).forEach((a) => { if (!want.includes(a.id)) want.push(a.id); });
+      // every album's cover and count (the rows slide through all of them), the newest first
+      const want = albums.filter((a) => a.kind === 'album').slice(0, 60).map((a) => a.id);
       if (this.state.albumOpen && !want.includes(this.state.albumOpen)) want.push(this.state.albumOpen);
       await this.ensurePhotos(want, true);
     } catch (e) {
@@ -1382,7 +1453,7 @@ class Component extends DCLogic {
     this.setState({ albums: albums, photoRev: this.state.photoRev + 1 });
     this.saveAlbums(albums);
   }
-  albumsShown(s) { return (s.albums || []).filter((a) => !s.albumDept || a.dept === s.albumDept).slice(0, s.albumShow); }
+  albumsShown(s) { return (s.albums || []).filter((a) => !s.albumDept || a.dept === s.albumDept).slice(0, 96); }
   ensureShown() { this.ensurePhotos(this.albumsShown(this.state).filter((a) => a.kind === 'album' && a.count === undefined).map((a) => a.id)); }
   openAlbum(id) {
     return (e) => {
@@ -1393,7 +1464,7 @@ class Component extends DCLogic {
     };
   }
   albumBack = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumOpen: null, lb: null, lbSolo: null }); };
-  pickAlbumDept(d) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumDept: d, albumShow: 12 }); setTimeout(() => this.ensureShown(), 0); }; }
+  pickAlbumDept(d) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumDept: d, albumShow: 12 }); this.carReset('#albums'); setTimeout(() => this.ensureShown(), 0); }; }
   albumShowMore = () => { this.setState({ albumShow: this.state.albumShow + 12 }); setTimeout(() => this.ensureShown(), 0); };
   lbSet(i) {
     return (e) => {
@@ -1433,6 +1504,28 @@ class Component extends DCLogic {
   };
   imgOk = (e) => { e.currentTarget.style.display = 'block'; };
   pickDept(i) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ dept: i }); }; }
+  // ── 옆으로 넘겨 보는 줄 ──
+  // One screenful ("page") holds this many across; the stylesheet uses the same widths.
+  carCols() { const w = typeof innerWidth === 'number' ? innerWidth : 1280; return w <= 640 ? 2 : (w < 900 ? 3 : 4); }
+  homeCols() { const w = typeof innerWidth === 'number' ? innerWidth : 1280; return w < 900 ? 2 : 4; }
+  carStep(dir) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const c = e && e.currentTarget && e.currentTarget.closest ? e.currentTarget.closest('.car') : null;
+      const t = c && c.querySelector('.car-track'); if (!t) return;
+      const pg = t.querySelector('.car-page');
+      t.scrollBy({ left: dir * ((pg ? pg.getBoundingClientRect().width : t.clientWidth) + 24), behavior: 'smooth' });
+    };
+  }
+  // back to the first screenful (after the list under it changed)
+  carReset(sel) {
+    setTimeout(() => {
+      Array.prototype.forEach.call(document.querySelectorAll((sel ? sel + ' ' : '') + '.car-track'), (t) => {
+        try { t.scrollTo({ left: 0, behavior: 'instant' }); } catch (e) { t.scrollLeft = 0; }
+        if (t.parentElement) t.parentElement.classList.remove('car-moved', 'car-at-end');
+      });
+    }, 0);
+  }
   componentDidMount() {
     const read = () => {
       const h = (location.hash || '#home').slice(1);
@@ -1449,10 +1542,25 @@ class Component extends DCLogic {
       if (e.key === 'ArrowRight') this.lbStep(1)();
     };
     addEventListener('keydown', this._onKey);
+    // which arrows a sliding row shows follows where it has been scrolled to (scroll events don't bubble: capture)
+    this._onCarScroll = (e) => {
+      const t = e.target; if (!t || !t.classList || !t.classList.contains('car-track')) return;
+      const c = t.parentElement; if (!c) return;
+      c.classList.add('car-moved');
+      c.classList.toggle('car-at-start', t.scrollLeft <= 4);
+      c.classList.toggle('car-at-end', t.scrollLeft >= t.scrollWidth - t.clientWidth - 4);
+    };
+    document.addEventListener('scroll', this._onCarScroll, true);
+    this._onResize = () => {
+      const c = this.carCols(), h = this.homeCols();
+      if (c !== this.state.cols || h !== this.state.homeCols) { this.setState({ cols: c, homeCols: h }); this.carReset(''); }
+    };
+    addEventListener('resize', this._onResize);
+    this._onResize();
     this._onHash = read;
     addEventListener('hashchange', read);
   }
-  componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); removeEventListener('keydown', this._onKey); }
+  componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); removeEventListener('keydown', this._onKey); removeEventListener('resize', this._onResize); document.removeEventListener('scroll', this._onCarScroll, true); }
   // 메뉴를 옮길 때의 디졸브: 지금 화면이 서서히 사라지면서 새 화면이 겹쳐 나타난다.
   // The published site cross-fades the two screens (View Transitions); where the browser can't do that,
   // and on the canvas, the new screen simply fades in. `after` runs once the new screen is drawn.
@@ -1592,7 +1700,20 @@ class Component extends DCLogic {
     // The home page shows the newest of the 교회 행사 folder (the ones that already have photos first).
     const homeDept = albumDepts.find((d) => d.indexOf('행사') >= 0) || '';
     const homePool = homeDept ? allAlbums.filter((a) => a.dept === homeDept) : allAlbums;
-    const homePick = homePool.filter((a) => a.count > 0).concat(homePool.filter((a) => !(a.count > 0))).slice(0, 4);
+    const homePick = homePool.filter((a) => a.count > 0).concat(homePool.filter((a) => !(a.count > 0))).slice(0, 48);
+    // sliding rows: the cards cut into screenfuls
+    const chunk = (arr, n) => { const out = []; for (let i = 0; i < arr.length; i += Math.max(1, n)) out.push({ key: 'pg' + i, items: arr.slice(i, i + Math.max(1, n)) }); return out; };
+    const plainName = (v) => String(v || '').replace(/[\s·ㆍ・.]/g, '');
+    // 부서소개: every photo of the department — the ones dropped straight into its folder and the ones inside
+    // its event folders — newest first; each opens large.
+    const deptPages = (name) => {
+      const cards = [];
+      allAlbums.filter((a) => plainName(a.dept) === plainName(name)).forEach((a) => {
+        if (a.kind === 'photo') cards.push({ ...albumCard(a), meta: a.date });
+        else ((this._photos && this._photos[a.id]) || []).forEach((ph) => cards.push({ id: ph.id, title: a.title, meta: a.date, cover: this.driveImg(ph.id, 640), coverId: ph.id, empty: '', open: this.lbShow(ph.id, a.title) }));
+      });
+      return chunk(cards.slice(0, 80), st.cols);
+    };
     // 주보: files in the Drive folder "_주보" on the published site; the canvas keeps three sample rows.
     const noop = () => {};
     const bulletinList = albumCfg
@@ -1642,15 +1763,15 @@ class Component extends DCLogic {
       albumLive: !!albumCfg, albumSlots: !albumCfg,
       albumErr: !!albumCfg && st.albumErr,
       albumDriveHref: albumCfg ? 'https://drive.google.com/drive/folders/' + albumCfg.root : '#',
-      albumHomeLive: homePick.map(albumCard),
+      albumHomePages: chunk(homePick.map(albumCard), st.homeCols * 2), albumHomeMulti: homePick.length > st.homeCols * 2,
+      carPrev: this.carStep(-1), carNext: this.carStep(1),
       albumListing: !!albumCfg && !openA, albumViewing: !!albumCfg && !!openA,
       albumTabs: (albumDepts.length > 1 ? [''].concat(albumDepts) : []).map((d) => ({
         label: d || '전체', go: this.pickAlbumDept(d), current: d === st.albumDept ? 'true' : undefined,
         color: d === st.albumDept ? 'var(--color-accent-700)' : 'var(--color-text)',
         underline: d === st.albumDept ? 'var(--color-accent-700)' : 'transparent',
       })),
-      albumCards: albumInDept.slice(0, st.albumShow).map(albumCard),
-      albumMore: albumInDept.length > st.albumShow,
+      albumPages: chunk(albumInDept.slice(0, 96).map(albumCard), st.cols * 2), albumMulti: albumInDept.length > st.cols * 2,
       albumNone: !!albumCfg && !!st.albums && !albumInDept.length && !st.albumErr,
       albumShowMore: this.albumShowMore, albumBack: this.albumBack,
       albumTitle: openA ? openA.title : '',
@@ -1741,7 +1862,11 @@ class Component extends DCLogic {
         { id: 'dept-youth', group: '청년부', name: '청년부', photos: [1,2,3,4].map(n => ({ id: 'youth-' + n, file: '부서소개_청년부_' + n + '.jpg', src: pic('부서소개_청년부_' + n) })),
           meta: '대상 : 대학생 · 직장 청년 | 예배 : 주일 오후 1시 30분, 본당 (주일 3부 예배 주관) | 담당교역자 : 이수철 부목사',
           lines: ['하나, 청년기의 시작을 하나님 말씀으로 채워갑니다.', '하나, 찬양과 교제로 서로의 신앙을 세워갑니다.', '하나, 주일 3부 예배를 섬기며 예배하는 삶을 배웁니다.'] },
-      ].map((d, i) => ({ ...d, hidden: i !== this.state.dept, opacity: i === this.state.dept ? 1 : 0 })),
+      ].map((d, i) => {
+        const pages = albumCfg ? deptPages(d.name) : [];
+        return { ...d, hidden: i !== this.state.dept, opacity: i === this.state.dept ? 1 : 0, slots: !albumCfg, live: !!albumCfg, pages: pages,
+          multi: pages.length > 1, none: !!albumCfg && !!st.albums && !pages.length };
+      }),
       newsDate: albumCfg ? (newsDay && !isNaN(newsDay) ? newsDay.getFullYear() + '년 ' + (newsDay.getMonth() + 1) + '월 ' + newsDay.getDate() + '일 기준' : '') : '2026년 9월 27일 주보',
       newsMaxH: this.state.newsOpen ? '4000px' : '420px',
       newsFadeOpacity: this.state.newsOpen ? 0 : 1,
@@ -1774,8 +1899,7 @@ class Component extends DCLogic {
         { title: '가정과 자녀를 위한 집중기도회', when: '매주 수요예배 후 · 본당' },
         { title: '금요전도모임', when: '매주 금요일 오후 2시 30분 · 1층 로비' },
       ].filter(() => !albumCfg).concat(albumCfg ? liveNewsRows.slice(0, 4).map((r) => ({ title: r[1], when: r[2] || '' })) : []),
-      bulletinCards: bulletinList.slice(0, 4),
-      bulletinMore: bulletinList.length > 4,
+      bulletinPages: chunk(bulletinList.slice(0, 60), st.cols), bulletinMulti: bulletinList.length > st.cols,
       bulletinsAll: bulletinList.slice(0, 26),
       bulletinNone: !!albumCfg && !!st.bulletins && !st.bulletins.length,
       album,
