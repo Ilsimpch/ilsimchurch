@@ -6,7 +6,7 @@
 <title>일심교회</title>
 <meta name="description" content="대한예수교장로회 일심교회 — 서울 강남구 대치동. 예배 안내, 예배 영상, 교회 소식.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<script>window.ILSIM_ASSETS = ["hero-art.webp", "pastor.webp", "poster-dawn.webp", "poster-fri.webp", "poster-sunday.webp", "poster-wed.webp"];</script>
+<script>window.ILSIM_ASSETS = ["hero-art.webp", "pastor.webp", "poster-dawn.webp", "poster-fri.webp", "poster-sunday.webp", "poster-wed.webp"]; window.ILSIM_ALBUMS = {"key": "AIzaSyCl18gV0vKU-HoJ-379imb6rEIP1R2F79w", "root": "1PRjCb6mFbzt9rT3oD3eknA-QTlxf531T"};</script>
 <script src="assets/react.production.min.js"></script>
 <script src="assets/react-dom.production.min.js"></script>
 <script src="./support.js"></script>
@@ -419,6 +419,13 @@ textarea.input { min-height: 90px; resize: vertical; }
   .yt-poster-wed { background-image: url(assets/poster-wed.webp); }
   .yt-poster-fri { background-image: url(assets/poster-fri.webp); }
   .yt-poster-dawn { background-image: url(assets/poster-dawn.webp); }
+  /* 교회 앨범 (Google Drive) */
+  .alb-card { display: block; color: inherit; text-decoration: none; }
+  .alb-card:hover .alb-cover { box-shadow: 0 0 0 2px var(--color-accent-700); }
+  .alb-photo { display: block; aspect-ratio: 1 / 1; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
+  .alb-photo:hover { box-shadow: 0 0 0 2px var(--color-accent-700); }
+  .lb-btn { position: absolute; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0 0 4px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; }
+  .lb-btn:hover { background: rgba(255, 255, 255, 0.26); }
     body { margin: 0; text-wrap: pretty; font-size: 17px; line-height: 28px; word-break: keep-all; }
     a { color: var(--color-accent-700); text-decoration: none; }
     a:hover { color: var(--color-accent-600); text-decoration: underline; }
@@ -485,6 +492,8 @@ textarea.input { min-height: 90px; resize: vertical; }
       .m-photo, .m-photo image-slot { width: 100% !important; height: auto !important; aspect-ratio: 4 / 5; }
       .m-photo { max-width: 132px; }
       .dept-tabs { gap: 8px 18px !important; }
+      .alb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 6px !important; }
+      .lb-btn { width: 40px; height: 40px; font-size: 26px; }
       .table th, .table td { padding: 10px 8px; font-size: 14px; }
     }
   </style>
@@ -619,6 +628,25 @@ textarea.input { min-height: 90px; resize: vertical; }
         <h2 style="font-size: 28px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">교회 앨범</h2>
         <a href="#story" onClick="{{ goStory }}" style="font-size: 16.5px;">앨범 전체 보기 →</a>
       </div>
+      <sc-if value="{{ albumLive }}" hint-placeholder-val="{{ false }}">
+      <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+        <sc-for list="{{ albumHomeLive }}" as="a" hint-placeholder-count="4">
+          <a href="#story" onClick="{{ a.open }}" class="alb-card">
+            <div class="alb-cover" style="position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.empty }}</span>
+              <sc-if value="{{ a.cover }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ a.cover }}" data-fid="{{ a.coverId }}" data-w="640" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+              </sc-if>
+            </div>
+            <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.meta }}</span></div>
+          </a>
+        </sc-for>
+      </div>
+      <sc-if value="{{ albumErr }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 0; font-size: 16.5px; color: var(--color-neutral-700);">앨범을 불러오지 못했습니다. <a href="{{ albumDriveHref }}" target="_blank" rel="noopener">구글 드라이브에서 보기 ↗</a></p>
+      </sc-if>
+      </sc-if>
+      <sc-if value="{{ albumSlots }}" hint-placeholder-val="{{ true }}">
       <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
         <sc-for list="{{ albumHome }}" as="a" hint-placeholder-count="4">
           <figure style="margin: 0;">
@@ -629,6 +657,7 @@ textarea.input { min-height: 90px; resize: vertical; }
           </figure>
         </sc-for>
       </div>
+      </sc-if>
     </section>
   </div>
 </sc-if>
@@ -906,8 +935,53 @@ textarea.input { min-height: 90px; resize: vertical; }
       </div>
     </section>
 
-    <section style="padding: 0 0 84px;">
+    <section id="albums" style="padding: 0 0 84px;">
       <h2 style="font-size: 28px; line-height: 1.3; margin: 0 0 20px; letter-spacing: -0.015em;">교회 앨범</h2>
+      <sc-if value="{{ albumLive }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ albumListing }}" hint-placeholder-val="{{ false }}">
+        <div class="alb-tabs" style="display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0 0 24px;">
+          <sc-for list="{{ albumTabs }}" as="t" hint-placeholder-count="0">
+            <a href="#story" onClick="{{ t.go }}" aria-current="{{ t.current }}" style="font-size: 16.5px; line-height: 26px; font-family: var(--font-heading); font-weight: 600; color: {{ t.color }}; border-bottom: 2px solid {{ t.underline }}; padding-bottom: 2px;" style-hover="color: var(--color-accent-700);">{{ t.label }}</a>
+          </sc-for>
+        </div>
+        <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 20px;">
+          <sc-for list="{{ albumCards }}" as="a" hint-placeholder-count="0">
+            <a href="#story" onClick="{{ a.open }}" class="alb-card">
+              <div class="alb-cover" style="position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.empty }}</span>
+                <sc-if value="{{ a.cover }}" hint-placeholder-val="{{ false }}">
+                  <img src="{{ a.cover }}" data-fid="{{ a.coverId }}" data-w="640" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+                </sc-if>
+              </div>
+              <div class="m-cap" style="margin-top: 10px; font-size: 16.5px; line-height: 24px;">{{ a.title }}<span style="display:block; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ a.meta }}</span></div>
+            </a>
+          </sc-for>
+        </div>
+        <sc-if value="{{ albumMore }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 28px 0 0;"><button type="button" class="btn btn-ghost" onClick="{{ albumShowMore }}">앨범 더 보기</button></p>
+        </sc-if>
+        <sc-if value="{{ albumNone }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0; font-size: 16.5px; color: var(--color-neutral-700);">아직 올라온 앨범이 없습니다.</p>
+        </sc-if>
+        <sc-if value="{{ albumErr }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0; font-size: 16.5px; color: var(--color-neutral-700);">앨범을 불러오지 못했습니다. <a href="{{ albumDriveHref }}" target="_blank" rel="noopener">구글 드라이브에서 보기 ↗</a></p>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ albumViewing }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 0 0 14px; font-size: 16.5px;"><a href="#story" onClick="{{ albumBack }}">← 앨범 목록</a></p>
+        <h3 style="font-size: 24px; line-height: 1.3; margin: 0; letter-spacing: -0.015em;">{{ albumTitle }}</h3>
+        <p style="margin: 6px 0 20px; font-size: 15px; color: var(--color-neutral-600); letter-spacing: 0.04em;">{{ albumMeta }}</p>
+        <div class="alb-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;">
+          <sc-for list="{{ albumPhotos }}" as="p" hint-placeholder-count="0">
+            <a class="alb-photo" href="{{ p.href }}" target="_blank" rel="noopener" onClick="{{ p.open }}" aria-label="{{ p.alt }}">
+              <img src="{{ p.src }}" data-fid="{{ p.id }}" data-w="480" alt="" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            </a>
+          </sc-for>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 16.5px; color: var(--color-neutral-700);">{{ albumNote }}</p>
+      </sc-if>
+      </sc-if>
+      <sc-if value="{{ albumSlots }}" hint-placeholder-val="{{ true }}">
       <div class="m-2col" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px 20px;">
         <sc-for list="{{ album }}" as="a" hint-placeholder-count="6">
           <figure style="margin: 0;">
@@ -919,6 +993,7 @@ textarea.input { min-height: 90px; resize: vertical; }
         </sc-for>
       </div>
       <p style="margin: 20px 0 0; font-size: 15px; color: var(--color-neutral-700);">사진을 각 칸에 끌어다 놓으면 바뀝니다.</p>
+      </sc-if>
     </section>
   </sc-if>
 
@@ -927,10 +1002,21 @@ textarea.input { min-height: 90px; resize: vertical; }
     <span>TEL 02-539-1009, 539-1374 · FAX 02-539-1373 · ispch@hanmail.net</span>
   </footer>
 </div>
+
+<!-- 사진 크게 보기 -->
+<sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+  <div class="lb" role="dialog" aria-label="사진 크게 보기" onClick="{{ lbClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(12, 16, 20, 0.94); display: flex; align-items: center; justify-content: center;">
+    <img src="{{ lbSrc }}" data-fid="{{ lbId }}" data-w="1600" alt="{{ lbAlt }}" loading="lazy" onError="{{ imgFail }}" onLoad="{{ imgOk }}" onClick="{{ lbStop }}" style="max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 4px; display: block;">
+    <button type="button" class="lb-btn" aria-label="이전 사진" onClick="{{ lbPrev }}" style="left: 12px; top: 50%; transform: translateY(-50%);">‹</button>
+    <button type="button" class="lb-btn" aria-label="다음 사진" onClick="{{ lbNext }}" style="right: 12px; top: 50%; transform: translateY(-50%);">›</button>
+    <button type="button" class="lb-btn" aria-label="닫기" onClick="{{ lbClose }}" style="right: 12px; top: 12px; font-size: 26px;">×</button>
+    <span style="position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 15px; letter-spacing: 0.06em; opacity: 0.8;">{{ lbCount }}</span>
+  </div>
+</sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"season":{"editor":"enum","options":["auto","winter","summer"],"default":"auto","tsType":"string","section":"예배 시간"},"youtubeId":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"sermonMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 주일예배 (메인)"},"youtubeIdOpen":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openTitle":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"openMeta":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 열린예배"},"youtubeIdWed":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 수요예배"},"youtubeIdDawn":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 새벽예배"},"youtubeIdFri":{"editor":"text","default":"","tsType":"string","section":"예배 영상 · 금요기도회"},"videoMode":{"editor":"enum","options":["auto","live"],"default":"auto","tsType":"string","section":"기타"},"channelUrl":{"editor":"text","default":"","tsType":"string","section":"기타"},"$preview":{"width":1280,"height":2700}}'>
 class Component extends DCLogic {
-  state = { page: 'home', dept: 0, newsOpen: false, vids: null };
+  state = { page: 'home', dept: 0, newsOpen: false, vids: null, albums: null, albumErr: false, albumDept: '', albumShow: 12, albumOpen: null, photoRev: 0, lb: null };
   // One YouTube playlist per service. The channel keeps each newest-first.
   playlists = {
     sunday: 'PL22_WjwmV4sYWhPrUAcTdLMT98NFzQMUm',
@@ -1048,6 +1134,135 @@ class Component extends DCLogic {
       try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), vids: vids })); } catch (e) {}
     }
   }
+  // ── 교회 앨범 ──────────────────────────────────────────────────────────────
+  // Photos live in a public Google Drive folder: 홈페이지 앨범 › 부서 › "2026.11 행사 이름" › photos.
+  // Whoever may edit a folder in Drive manages that album; the page only reads. The published
+  // site gets the folder id and a read-only browser key from the build (window.ILSIM_ALBUMS);
+  // the design canvas has neither, and keeps its photo slots.
+  albumCfg() { return (typeof window !== 'undefined' && window.ILSIM_ALBUMS) || null; }
+  async driveList(q, fields, orderBy) {
+    const cfg = this.albumCfg(); const out = []; let token = '';
+    for (let page = 0; page < 5; page++) {
+      const p = new URLSearchParams({ q: q + ' and trashed = false', fields: 'nextPageToken,files(' + fields + ')', pageSize: '1000', key: cfg.key });
+      if (orderBy) p.set('orderBy', orderBy);
+      if (token) p.set('pageToken', token);
+      const r = await fetch('https://www.googleapis.com/drive/v3/files?' + p);
+      if (!r.ok) throw new Error('drive ' + r.status);
+      const j = await r.json();
+      out.push(...(j.files || []));
+      token = j.nextPageToken || '';
+      if (!token) break;
+    }
+    return out;
+  }
+  saveAlbums(albums) {
+    try { localStorage.setItem('ilsim.albums.v1', JSON.stringify({ t: this._albumT || Date.now(), albums: albums })); } catch (e) {}
+  }
+  async loadAlbums() {
+    const cfg = this.albumCfg();
+    if (!cfg) return;
+    // The last list shows at once; after 5 minutes Drive is asked again behind it.
+    let last = null;
+    try {
+      const c = JSON.parse(localStorage.getItem('ilsim.albums.v1') || 'null');
+      if (c && Array.isArray(c.albums)) {
+        last = c.albums; this._albumT = c.t;
+        this.setState({ albums: last });
+        if (Date.now() - c.t < 5 * 60 * 1000) return;
+      }
+    } catch (e) {}
+    try {
+      const FOLDER = "mimeType = 'application/vnd.google-apps.folder'";
+      const depts = await this.driveList("'" + cfg.root + "' in parents and " + FOLDER, 'id,name', 'name');
+      const lists = await Promise.all(depts.map((d) => this.driveList("'" + d.id + "' in parents and " + FOLDER, 'id,name', 'name desc')));
+      const old = {}; (last || []).forEach((a) => { old[a.id] = a; });
+      const albums = [];
+      depts.forEach((d, i) => lists[i].forEach((f) => {
+        // "2026.11 추수감사주일" → title "2026 추수감사주일", date "2026. 11"
+        const m = f.name.match(/^(\d{4})\s*[.\-\/년]\s*(\d{1,2})\s*월?\s+(.+)$/);
+        const o = old[f.id] || {};
+        albums.push({ id: f.id, name: f.name, dept: d.name, title: m ? m[1] + ' ' + m[3] : f.name, date: m ? m[1] + '. ' + Number(m[2]) : '',
+          sort: m ? m[1] + String(m[2]).padStart(2, '0') : '', count: o.count, cover: o.cover });
+      }));
+      albums.sort((a, b) => (b.sort || '').localeCompare(a.sort || '') || a.name.localeCompare(b.name, 'ko'));
+      this._albumT = Date.now();
+      if (!this._alive) return;
+      this.setState({ albums: albums, albumErr: false });
+      this.saveAlbums(albums);
+      const want = albums.slice(0, 12).map((a) => a.id);
+      if (this.state.albumOpen && !want.includes(this.state.albumOpen)) want.push(this.state.albumOpen);
+      await this.ensurePhotos(want, true);
+    } catch (e) {
+      if (this._alive && !last) this.setState({ albums: [], albumErr: true });
+    }
+  }
+  // The photo list of each album asked for (one request per album, four at a time); its count
+  // and first photo become the album card's "사진 n장" and cover.
+  async ensurePhotos(ids, force) {
+    if (!this.albumCfg()) return;
+    this._photos = this._photos || {};
+    const todo = ids.filter((id) => id && (force || !this._photos[id]));
+    if (!todo.length) return;
+    let i = 0;
+    const work = async () => {
+      while (i < todo.length) {
+        const id = todo[i++];
+        try {
+          const files = await this.driveList("'" + id + "' in parents and mimeType contains 'image/'", 'id,name,thumbnailLink', 'name_natural');
+          this._photos[id] = files.map((f) => ({ id: f.id, name: f.name, t: f.thumbnailLink || '' }));
+        } catch (e) {}
+      }
+    };
+    await Promise.all([work(), work(), work(), work()]);
+    if (!this._alive) return;
+    const albums = (this.state.albums || []).map((a) => (this._photos[a.id]
+      ? Object.assign({}, a, { count: this._photos[a.id].length, cover: (this._photos[a.id][0] || {}).id || '' }) : a));
+    this.setState({ albums: albums, photoRev: this.state.photoRev + 1 });
+    this.saveAlbums(albums);
+  }
+  albumsShown(s) { return (s.albums || []).filter((a) => !s.albumDept || a.dept === s.albumDept).slice(0, s.albumShow); }
+  ensureShown() { this.ensurePhotos(this.albumsShown(this.state).filter((a) => a.count === undefined).map((a) => a.id)); }
+  openAlbum(id) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      this.setState({ page: 'story', albumOpen: id, lb: null });
+      history.replaceState(null, '', '#story');
+      this.ensurePhotos([id]);
+      setTimeout(() => { const el = document.getElementById('albums'); if (el) scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76 }); }, 80);
+    };
+  }
+  albumBack = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumOpen: null, lb: null }); };
+  pickAlbumDept(d) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ albumDept: d, albumShow: 12 }); setTimeout(() => this.ensureShown(), 0); }; }
+  albumShowMore = () => { this.setState({ albumShow: this.state.albumShow + 12 }); setTimeout(() => this.ensureShown(), 0); };
+  lbSet(i) {
+    return (e) => {
+      if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
+      this.setState({ lb: i });
+    };
+  }
+  lbStep(d) {
+    return (e) => {
+      if (e) { if (e.preventDefault) e.preventDefault(); if (e.stopPropagation) e.stopPropagation(); }
+      const n = ((this._photos || {})[this.state.albumOpen] || []).length;
+      if (this.state.lb == null || !n) return;
+      this.setState({ lb: (this.state.lb + d + n) % n });
+    };
+  }
+  lbStop = (e) => { if (e && e.stopPropagation) e.stopPropagation(); };
+  // A Drive photo is first asked for through Drive's thumbnail address; if that fails the image
+  // falls back to Google's image host, then to the short-lived link the file list came with.
+  driveImg(id, w) { return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w' + w; }
+  imgFail = (e) => {
+    const img = e.currentTarget; const id = img.getAttribute('data-fid'); const w = img.getAttribute('data-w') || '640';
+    if (!id) { img.style.display = 'none'; return; }
+    if (img.dataset.tried !== id) { img.dataset.tried = id; img.dataset.n = '0'; }
+    let t = '';
+    Object.keys(this._photos || {}).some((k) => this._photos[k].some((p) => (p.id === id && p.t ? ((t = p.t), true) : false)));
+    const alts = ['https://lh3.googleusercontent.com/d/' + id + '=w' + w, t ? t.replace(/=s\d+$/, '=s' + w) : ''].filter(Boolean);
+    const n = Number(img.dataset.n || 0);
+    if (n < alts.length) { img.dataset.n = String(n + 1); img.src = alts[n]; } else { img.style.display = 'none'; }
+  };
+  imgOk = (e) => { e.currentTarget.style.display = 'block'; };
   pickDept(i) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ dept: i }); }; }
   componentDidMount() {
     const read = () => {
@@ -1057,12 +1272,20 @@ class Component extends DCLogic {
     read();
     this._alive = true;
     this.loadLatest();
+    this.loadAlbums();
+    this._onKey = (e) => {
+      if (this.state.lb == null) return;
+      if (e.key === 'Escape') this.setState({ lb: null });
+      if (e.key === 'ArrowLeft') this.lbStep(-1)();
+      if (e.key === 'ArrowRight') this.lbStep(1)();
+    };
+    addEventListener('keydown', this._onKey);
     this._onHash = read;
     addEventListener('hashchange', read);
   }
-  componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); }
+  componentWillUnmount() { this._alive = false; removeEventListener('hashchange', this._onHash); removeEventListener('keydown', this._onKey); }
   go(page) {
-    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
+    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ page, albumOpen: null, lb: null }); history.replaceState(null, '', '#' + page); scrollTo(0, 0); };
   }
   jump(id) {
     return (e) => {
@@ -1137,6 +1360,49 @@ class Component extends DCLogic {
       const file = '교회앨범_' + String(i + 1).padStart(2, '0');
       return { id: 'album-' + (i + 1), title, date, src: pic(file), placeholder: file + '.jpg' };
     });
+    // 교회 앨범 from Google Drive (published site only — see loadAlbums).
+    const albumCfg = this.albumCfg();
+    const st = this.state;
+    const allAlbums = st.albums || [];
+    const albumCard = (a) => ({
+      id: a.id, title: a.title,
+      meta: [a.date, a.dept, a.count ? '사진 ' + a.count + '장' : ''].filter(Boolean).join(' · '),
+      cover: a.cover ? this.driveImg(a.cover, 640) : '', coverId: a.cover || '',
+      empty: a.count === 0 ? '사진 준비 중' : '',
+      open: this.openAlbum(a.id),
+    });
+    const albumDepts = allAlbums.map((a) => a.dept).filter((d, i, arr) => arr.indexOf(d) === i);
+    const albumInDept = allAlbums.filter((a) => !st.albumDept || a.dept === st.albumDept);
+    const openA = allAlbums.find((a) => a.id === st.albumOpen) || null;
+    const openPhotos = (openA && this._photos && this._photos[openA.id]) || null;
+    const lbP = openPhotos && st.lb != null ? openPhotos[st.lb] : null;
+    const liveAlbum = {
+      albumLive: !!albumCfg, albumSlots: !albumCfg,
+      albumErr: !!albumCfg && st.albumErr,
+      albumDriveHref: albumCfg ? 'https://drive.google.com/drive/folders/' + albumCfg.root : '#',
+      albumHomeLive: allAlbums.slice(0, 4).map(albumCard),
+      albumListing: !!albumCfg && !openA, albumViewing: !!albumCfg && !!openA,
+      albumTabs: (albumDepts.length > 1 ? [''].concat(albumDepts) : []).map((d) => ({
+        label: d || '전체', go: this.pickAlbumDept(d), current: d === st.albumDept ? 'true' : undefined,
+        color: d === st.albumDept ? 'var(--color-accent-700)' : 'var(--color-text)',
+        underline: d === st.albumDept ? 'var(--color-accent-700)' : 'transparent',
+      })),
+      albumCards: albumInDept.slice(0, st.albumShow).map(albumCard),
+      albumMore: albumInDept.length > st.albumShow,
+      albumNone: !!albumCfg && !!st.albums && !albumInDept.length && !st.albumErr,
+      albumShowMore: this.albumShowMore, albumBack: this.albumBack,
+      albumTitle: openA ? openA.title : '',
+      albumMeta: openA ? [openA.date, openA.dept, openPhotos && openPhotos.length ? '사진 ' + openPhotos.length + '장' : ''].filter(Boolean).join(' · ') : '',
+      albumPhotos: (openPhotos || []).map((ph, i) => ({
+        id: ph.id, src: this.driveImg(ph.id, 480), href: 'https://drive.google.com/file/d/' + ph.id + '/view',
+        alt: (openA ? openA.title : '') + ' 사진 ' + (i + 1), open: this.lbSet(i),
+      })),
+      albumNote: !openA ? '' : !openPhotos ? '사진을 불러오는 중입니다…' : openPhotos.length ? '' : '아직 사진이 없습니다. 곧 올리겠습니다.',
+      lbOpen: !!lbP, lbSrc: lbP ? this.driveImg(lbP.id, 1600) : '', lbId: lbP ? lbP.id : '',
+      lbAlt: lbP && openA ? openA.title + ' 사진 ' + (st.lb + 1) : '',
+      lbCount: lbP ? (st.lb + 1) + ' / ' + openPhotos.length : '',
+      lbPrev: this.lbStep(-1), lbNext: this.lbStep(1), lbClose: this.lbSet(null), lbStop: this.lbStop,
+    };
     return {
       isHome: p === 'home', isAbout: p === 'about', isWorship: p === 'worship', isSermon: p === 'sermon', isDepts: p === 'depts', isStory: p === 'story',
       curAbout: p === 'about' ? 'page' : undefined, curWorship: p === 'worship' ? 'page' : undefined, curSermon: p === 'sermon' ? 'page' : undefined,
@@ -1256,6 +1522,8 @@ class Component extends DCLogic {
       ],
       album,
       albumHome: album.slice(0, 4),
+      ...liveAlbum,
+      imgFail: this.imgFail, imgOk: this.imgOk,
       staffGroups: [
         { title: '부교역자', members: [
           { id: 'staff-park-wansu', file: '교회소개_부목사_박완수.jpg', src: pic('교회소개_부목사_박완수'), name: '박완수', role: '부목사', email: '', duties: ['유치·아동부, 중고등부 담당', '교육위원회 · 봉사위원회 · 관리위원회 담당', '1~7구역 담당'] },
