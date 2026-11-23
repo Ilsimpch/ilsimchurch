@@ -6,7 +6,7 @@
 <title>일심교회</title>
 <meta name="description" content="대한예수교장로회 일심교회 — 서울 강남구 대치동. 예배 안내, 예배 영상, 교회 소식.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<script>window.ILSIM_ASSETS = ["hero-art-wide.webp", "hero-art.webp", "pastor.webp", "poster-dawn.webp", "poster-fri.webp", "poster-sunday.webp", "poster-wed.webp"]; window.ILSIM_ALBUMS = {"key": "AIzaSyCl18gV0vKU-HoJ-379imb6rEIP1R2F79w", "root": "1PRjCb6mFbzt9rT3oD3eknA-QTlxf531T"};</script>
+<script>window.ILSIM_ASSETS = ["hero-art-wide.webp", "hero-art.webp", "pastor-cutout.webp", "pastor.webp", "poster-dawn.webp", "poster-fri.webp", "poster-sunday.webp", "poster-wed.webp"]; window.ILSIM_ALBUMS = {"key": "AIzaSyCl18gV0vKU-HoJ-379imb6rEIP1R2F79w", "root": "1PRjCb6mFbzt9rT3oD3eknA-QTlxf531T"};</script>
 <script src="assets/react.production.min.js"></script>
 <script src="assets/react-dom.production.min.js"></script>
 <script src="./support.js"></script>
@@ -527,6 +527,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       .m-photo, .m-photo image-slot { width: 100% !important; height: auto !important; aspect-ratio: 4 / 5; }
       .m-photo .m-face { height: 100% !important; }
       .m-photo { max-width: 132px; }
+      .m-pastor { width: min(82%, 300px) !important; margin: 0 auto; }
       .dept-tabs { gap: 8px 18px !important; }
       .alb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 6px !important; }
       .lb-btn { width: 40px; height: 40px; font-size: 26px; }
@@ -729,10 +730,9 @@ textarea.input { min-height: 90px; resize: vertical; }
         <p style="font-size: 16.5px; margin: 28px 0 0;">일심교회 위임목사 <strong style="font-family: var(--font-heading);">김은종</strong></p>
         <p style="font-size: 16px; margin: 4px 0 0;"><a href="mailto:joshua1382@hanmail.net">joshua1382@hanmail.net</a></p>
       </div>
-      <figure style="margin: 0; justify-self: start; padding-top: 6px;">
-        <div style="width: 260px; height: 325px; max-width: 100%; border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
-          <image-slot id="pastor" shape="rect" fit="cover" src="assets/pastor.webp" placeholder="교회소개_위임목사.jpg" role="img" aria-label="김은종 위임목사" style="width: 260px; height: 325px; display: block;"></image-slot>
-        </div>
+      <!-- the pastor's photo with its backdrop removed, so the figure stands straight on the page -->
+      <figure style="margin: 0; justify-self: center;">
+        <img class="m-pastor" src="assets/pastor-cutout.webp" alt="김은종 위임목사" width="840" height="1214" style="display: block; width: min(100%, 420px); height: auto;">
       </figure>
     </section>
 
